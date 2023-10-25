@@ -9,7 +9,7 @@ class BidirectionalConstSpeedAxis(object):
 
         # Sensors parameters and state
         self.sensorsPos = sensors
-        self.detectionRadius = 12
+        self.detectionRadius = 0.012
         self.digitalOut = [False for i in range(len(sensors))]
 
 
