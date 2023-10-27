@@ -1,5 +1,12 @@
+
+import sys
+# setting path
+sys.path.append('../')
+
 import os
 import time
+import models.BidirectionalConstSpeedAxis as axis
+from pymodbus.client import ModbusTcpClient
 from flask import Flask, render_template, Response
 
 app = Flask(__name__)
