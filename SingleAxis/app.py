@@ -7,7 +7,7 @@ import os
 import time
 import models.BidirectionalConstSpeedAxis as axis
 from pymodbus.client import ModbusTcpClient
-from flask import Flask, render_template, Response, request
+from flask import Flask, render_template, Response, request, jsonify
 
 app = Flask(__name__)
 global axis1
@@ -17,15 +17,23 @@ axis1.start()
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('dashboard.html')
 
-@app.route('/description')
-def description():
-    return render_template('description.html')
+@app.route('/setup')
+def setup():
+    return render_template('setup.html')
 
-@app.route('/visualisation')
-def visu():
-    return render_template('visu.html')
+@app.route('/dashboard')
+def dashboard():
+    return render_template('dashboard.html')
+
+@app.route('/exercice1')
+def ex1():
+    return render_template('exercice1.html')
+
+@app.route('/exercice2')
+def ex2():
+    return render_template('exercice2.html')
 
 @app.route('/runSim')
 def run():
@@ -57,6 +65,10 @@ def read_state():
         axis1.run = True if rr.bits[0] else False
         axis1.reverse = True if rr.bits[1] else False
         pos = "%.2f"%axis1.pos
+        #ret = {'position': pos, 'sensor1': axis1.digitalOut[0], 'sensor2': axis1.digitalOut[1]}
+        ret ='{} {} {} {} {}'.format(pos, axis1.digitalOut[0], axis1.digitalOut[1], axis1.run, axis1.reverse)
         print(pos, end="   \r", flush=True)
-        yield 'position: %s\n\n' % pos
+        #yield f"data: {pos}\n\n"
+        yield f"data: {ret}\n\n"
+        #yield jsonify(ret)
         
