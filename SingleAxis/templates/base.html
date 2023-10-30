@@ -32,10 +32,9 @@
 
             <!-- Sidebar - Brand -->
             <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/">
-                <div class="sidebar-brand-icon rotate-n-15">
-                    <i class="fas fa-laugh-wink"></i>
-                </div>
-                <div class="sidebar-brand-text mx-3">DyMation</div>
+                <div class="sidebar-brand-icon">
+                    <img src="{{ url_for('static', filename='ressources/logo.svg')}}" width="65%" height="65%"> </img>
+               </div>
             </a>
 
             <!-- Divider -->
@@ -49,9 +48,25 @@
                 <a class="nav-link" href="/description">
                   <i class="fas fa-fw fa-cog"></i>
                   <span>Configuration</span></a>
-                <a class="nav-link" href="/description">
-                  <i class="fas fa-search fa-sm"></i>
-                  <span>Exercices</span></a> 
+            </li>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider">
+
+            <!-- Exercises -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
+                    aria-expanded="true" aria-controls="collapseTwo">
+                    <i class="fas fa-fw fa-edit"></i>
+                    <span>Exercices</span>
+                </a>
+                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Exercices basiques:</h6>
+                        <a class="collapse-item" href="/description">Exercice 1</a>
+                        <a class="collapse-item" href="/description">Exercice 2</a>
+                    </div>
+                </div>
             </li>
 
             <!-- Divider -->
@@ -83,10 +98,10 @@
                     <form
                         class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
                         <div class="input-group">
-                            <input type="text" class="form-control bg-light border-0 small" placeholder="Modbus IP address..."
+                            <input type="text" class="form-control bg-light border-0 small" id="address" placeholder="Modbus IP address..."
                                 aria-label="Connect" aria-describedby="basic-addon2">
                             <div class="input-group-append">
-                                <button class="btn btn-primary" type="button">
+                                <button class="btn btn-primary" id="connect" type="button">
                                     <i class="fas fa-lock-open"></i>
                                 </button>
                             </div>
@@ -165,6 +180,24 @@
 
     <!-- Custom scripts for all pages-->
     <script src="{{ url_for('static', filename='scripts/sb-admin-2.min.js')}}"></script>
+
+    <script type=text/javascript>
+        $('#connect').on('click', function(e) {
+            $.post('/connect',
+                {
+                    address: $('#address').val()
+                },
+                function(data) {
+                    if(data['success']){
+                        var btn = document.getElementById('connect');
+                        btn.children[0].className= "fas fa-lock";
+                    }
+                }
+            );
+            return false;
+          });
+    </script>
+
 
     {% block script %} {% endblock %}
 

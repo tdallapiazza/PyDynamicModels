@@ -2,51 +2,65 @@
 
 {% block script %}
    <script type="text/javascript">
-      window.addEventListener("load", function() {
-         var rect = document.getElementById('rect234');
-         rect.setAttributeNS(null, 'style', "fill:#39a2df;stroke-width:1;stroke-miterlimit:0;stroke-dasharray:12, 3;fill-opacity:1");
-      });
       var source = new EventSource("/runSim");
         source.onmessage = function (event) {
-            var rect = document.getElementById('rect234');
-            rect.setAttributeNS(null, 'x', event.data);
+            alert(event.data);
+            //var pos = document.getElementById('position');
+            //alert(pos);
+            //pos.textContent =event.data;
         };
    </script>
+
+   <!-- Page level plugins -->
+   <script src="{{ url_for('static', filename='scripts/Chart.min.js')}}"></script>
+
+   <!-- Page level custom scripts -->
+   <script src="{{ url_for('static', filename='scripts/chart-area-demo.js')}}"></script>
+   <!--<script src="{{ url_for('static', filename='scripts/chart-pie-demo.js')}}"></script>
+       <script src="{{ url_for('static', filename='scripts/chart-bar-demo.js')}}"></script> -->
 {% endblock %}
 
 
 {% block content %}
-    <h1>{% block title %} Visualisation {% endblock %}</h1>
-    <svg
-   width="210mm"
-   height="297mm"
-   viewBox="0 0 210 297"
-   version="1.1"
-   id="svg5"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:svg="http://www.w3.org/2000/svg">
-  <defs
-     id="defs2" />
-  <g
-     id="layer1">
-    <rect
-       style="fill:#3ddb46;stroke-width:1;stroke-miterlimit:0;stroke-dasharray:12, 3;fill-opacity:1"
-       id="rect234"
-       width="66.471428"
-       height="44.19643"
-       x="41.014282"
-       y="41.367855" />
-    <ellipse
-       style="fill:#39a2df;stroke-width:1;stroke-miterlimit:0;stroke-dasharray:12, 3;fill-opacity:1"
-       id="path288"
-       cx="86.801781"
-       cy="147.26251"
-       rx="23.512501"
-       ry="13.612499" />
-    <path
-       style="fill:#bd2828;stroke-width:1;stroke-miterlimit:0;stroke-dasharray:12, 3;fill-opacity:1"
-       id="path342"
-       d="m 153.80357,121.98214 -14.99839,-3.33299 -11.24844,10.46579 -1.4649,-15.29426 -13.42951,-7.4638 14.09302,-6.11938 2.94855,-15.078674 10.17487,11.51227 15.25181,-1.85533 -7.80461,13.234354 z" />
-  </g>
-</svg>
+<!-- Page Heading -->
+<h1 class="h3 mb-2 text-gray-800">Visualisation</h1>
+<p class="mb-4">Visualisation des variables du système dynamique</p>
+<!-- Content Row -->
+<div class="row">
+
+   <div class="col-xl-8 col-lg-7">
+
+       <!-- Area Chart -->
+       <div class="card shadow mb-4">
+           <div class="card-header py-3">
+               <h6 class="m-0 font-weight-bold text-primary">Position</h6>
+           </div>
+           <div class="card-body">
+               <div class="chart-area">
+                   <canvas id="myAreaChart"></canvas>
+               </div>
+               <hr>
+               Position de chariot.
+           </div>
+       </div>
+   </div>
+
+   <!-- Position as a card-->
+   <div class="col-xl-3 col-md-6 mb-4">
+         <div class="card border-left-primary shadow h-100 py-2">
+            <div class="card-body">
+               <div class="row no-gutters align-items-center">
+                     <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                           Position</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800" id="position">0.0</div>
+                     </div>
+                     <div class="col-auto">
+                        <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                     </div>
+               </div>
+            </div>
+         </div>
+   </div>
+</div>
 {% endblock %}
