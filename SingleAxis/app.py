@@ -35,12 +35,17 @@ def ex1():
 def ex2():
     return render_template('exercice2.html')
 
-@app.route('/connect', methods=['POST', 'GET'])
+@app.route('/connect', methods=['POST'])
 def connect():
     res = False
     if not('client' in globals()):
         global client
-    if request.method == 'POST':
+    try:
+        if client.connected:
+            print("already connected")
+            client.close()
+            del client
+    except:
         client = ModbusTcpClient(host=request.form['address'])
         print('Connecting to master')
         res=client.connect()
@@ -57,10 +62,10 @@ def check_connect():
 
 def connection_checker():
     while True:
-        if client.connected:
-            res=True
-        else:
-            res=False
+        res = False
+        if 'client' in globals():
+            if client.connected:
+                res=True
         time.sleep(1.0)
         yield f"data: {res}\n\n"
 
@@ -77,17 +82,19 @@ def read_state():
         time.sleep(0.01)
         # as we are in simulation, there is no physical inputs so we'll use coils to set interal and read internal values
         # first read model sensors and set the corresponding coils
-        ad=0
-        for output in axis1.digitalOut:
-            client.write_coil(ad, output)
-            ad+=1
-        # then apply the commands if any
-        rr = client.read_coils(2,2)
-        axis1.run = True if rr.bits[0] else False
-        axis1.reverse = True if rr.bits[1] else False
-        pos = "%.2f"%axis1.pos
-        # formating the response
-        ret ='{} {} {} {} {}'.format(pos, axis1.digitalOut[0], axis1.digitalOut[1], axis1.run, axis1.reverse)
-        # print(pos, end="   \r", flush=True)
+        ret=''
+        if 'client' in globals():
+            ad=0
+            for output in axis1.digitalOut:
+                client.write_coil(ad, output)
+                ad+=1
+            # then apply the commands if any
+            rr = client.read_coils(2,2)
+            axis1.run = True if rr.bits[0] else False
+            axis1.reverse = True if rr.bits[1] else False
+            pos = "%.2f"%axis1.pos
+            # formating the response
+            ret ='{} {} {} {} {}'.format(pos, axis1.digitalOut[0], axis1.digitalOut[1], axis1.run, axis1.reverse)
+            # print(pos, end="   \r", flush=True)
         yield f"data: {ret}\n\n"
         
