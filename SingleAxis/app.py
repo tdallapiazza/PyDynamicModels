@@ -35,20 +35,41 @@ def ex1():
 def ex2():
     return render_template('exercice2.html')
 
+@app.route('/connect', methods=['POST', 'GET'])
+def connect():
+    res = False
+    if not('client' in globals()):
+        global client
+    if request.method == 'POST':
+        client = ModbusTcpClient(host=request.form['address'])
+        print('Connecting to master')
+        res=client.connect()
+    return {'success': res}
+
+    
+@app.route('/checkConnect')
+def check_connect():
+    return Response(
+        connection_checker(),
+        mimetype='text/event-stream'
+    )
+    
+
+def connection_checker():
+    while True:
+        if client.connected:
+            res=True
+        else:
+            res=False
+        time.sleep(1.0)
+        yield f"data: {res}\n\n"
+
 @app.route('/runSim')
 def run():
     return Response(
         read_state(),  # gen_date_time() is an Iterable
         mimetype='text/event-stream'  # mark as a stream response
     )
-
-@app.route('/connect', methods=['POST'])
-def connect():
-    global client 
-    client = ModbusTcpClient(host=request.form['address'])
-    print('Connecting to master')
-    res = client.connect()
-    return {'success': res}
 
 # a generator with yield expression
 def read_state():
@@ -65,10 +86,8 @@ def read_state():
         axis1.run = True if rr.bits[0] else False
         axis1.reverse = True if rr.bits[1] else False
         pos = "%.2f"%axis1.pos
-        #ret = {'position': pos, 'sensor1': axis1.digitalOut[0], 'sensor2': axis1.digitalOut[1]}
+        # formating the response
         ret ='{} {} {} {} {}'.format(pos, axis1.digitalOut[0], axis1.digitalOut[1], axis1.run, axis1.reverse)
-        print(pos, end="   \r", flush=True)
-        #yield f"data: {pos}\n\n"
+        # print(pos, end="   \r", flush=True)
         yield f"data: {ret}\n\n"
-        #yield jsonify(ret)
         

@@ -200,9 +200,19 @@
                         btn.children[0].className= "fas fa-lock";
                     }
                 }
-            );
+            );          
             return false;
-          });
+        });
+        var source = new EventSource("/checkConnect");
+        source.onmessage = function (event) {
+            var btn = document.getElementById('connect');
+            
+            if(event.data==="True"){
+                btn.children[0].className= "fas fa-lock";
+            }else{
+                btn.children[0].className= "fas fa-lock-open";
+            }
+        }
     </script>
 
 
