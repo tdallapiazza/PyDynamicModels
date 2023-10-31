@@ -61,3 +61,7 @@ class BidirectionalConstSpeedAxis(object):
     def stop(self):
         self._timer.cancel()
         self.is_running = False
+
+    def reset(self):
+        self.stop()
+        self.__init__(self.dt, self.speed, self.sensorsPos)

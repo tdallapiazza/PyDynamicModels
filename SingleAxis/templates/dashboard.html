@@ -2,32 +2,63 @@
 
 {% block script %}
    <script type="text/javascript">
-      var source = new EventSource("/runSim");
-        source.onmessage = function (event) {
-            const myArray = event.data.split(" ");
-            var pos = document.getElementById('position');
-            pos.textContent =myArray[0];
-            if(myArray[1]==="True"){
-               document.getElementById('capteur1').className = "fas fa-toggle-on fa-2x text-success ";
-            }else{
-               document.getElementById('capteur1').className = "fas fa-toggle-off fa-2x text-gray-800";
+      // Start sim action
+      $("#startSim").click(function(){
+         $.post("/startSim", function(data){
+            if(data['success']){
+               $("#stopSim").prop('disabled', false);
+               $("#startSim").prop('disabled', true);
+               $("#resetSim").prop('disabled', true);
+
+               // Finally creat the event listenner
+               var source = new EventSource("/runSim");
+               source.onmessage = function (event) {
+                  const myArray = event.data.split(" ");
+                  if(myArray[0]==='finished'){
+                     source.close();
+                     return;
+                  }
+                  var pos = document.getElementById('position');
+                  pos.textContent =myArray[0];
+                  if(myArray[1]==="True"){
+                     document.getElementById('capteur1').className = "fas fa-toggle-on fa-2x text-success ";
+                  }else{
+                     document.getElementById('capteur1').className = "fas fa-toggle-off fa-2x text-gray-800";
+                  }
+                  if(myArray[2]==="True"){
+                     document.getElementById('capteur2').className = "fas fa-toggle-on fa-2x text-success ";
+                  }else{
+                     document.getElementById('capteur2').className = "fas fa-toggle-off fa-2x text-gray-800";
+                  }
+                  if(myArray[3]==="True"){
+                     document.getElementById('moteur').className = "fas fa-toggle-on fa-2x text-success ";
+                  }else{
+                     document.getElementById('moteur').className = "fas fa-toggle-off fa-2x text-gray-800";
+                  }
+                  if(myArray[4]==="True"){
+                     document.getElementById('reverse').className = "fas fa-toggle-on fa-2x text-success ";
+                  }else{
+                     document.getElementById('reverse').className = "fas fa-toggle-off fa-2x text-gray-800";
+                  }
+               };
             }
-            if(myArray[2]==="True"){
-               document.getElementById('capteur2').className = "fas fa-toggle-on fa-2x text-success ";
-            }else{
-               document.getElementById('capteur2').className = "fas fa-toggle-off fa-2x text-gray-800";
+         });
+         
+      });
+      $("#stopSim").click(function(){
+         $.post("/stopSim", function(data){
+            if(data['success']){
+               $("#stopSim").prop('disabled', true);
+               $("#startSim").prop('disabled', false);
+               $("#resetSim").prop('disabled', false);
             }
-            if(myArray[3]==="True"){
-               document.getElementById('moteur').className = "fas fa-toggle-on fa-2x text-success ";
-            }else{
-               document.getElementById('moteur').className = "fas fa-toggle-off fa-2x text-gray-800";
-            }
-            if(myArray[4]==="True"){
-               document.getElementById('reverse').className = "fas fa-toggle-on fa-2x text-success ";
-            }else{
-               document.getElementById('reverse').className = "fas fa-toggle-off fa-2x text-gray-800";
-            }
-        };
+         });
+      });
+      $("#resetSim").click(function(){
+         $.post("/resetSim");
+      });
+
+      
    </script>
 
    <!-- Page level plugins -->
@@ -44,10 +75,9 @@
 
 <!-- Page Heading -->
 <h1 class="h3 mb-2 text-gray-800">{% block title %}Tableau de bord{% endblock %}</h1>
-<p class="mb-4">Visualisation des variables du système dynamique</p>
+<h2 class="h4 mb-2 text-gray-800">État du système</h2>
 <!-- Content Row -->
 <div class="row">
-
    <!-- Position as a card-->
    <div class="col-xl-3 col-md-6 mb-4">
          <div class="card border-left-primary shadow h-100 py-2">
@@ -105,4 +135,15 @@
          </div>
    </div>
 </div>
+<h2 class="h4 mb-2 text-gray-800">Contrôle du système</h2>
+<div class="row">
+   <div class="col-lg-6">
+      <button type="button" class="btn btn-primary" id="startSim">Start simulation</button>
+      <button type="button" class="btn btn-primary" id="resetSim">Reset simulation</button>
+      <button type="button" class="btn btn-primary" id="stopSim" disabled>Stop simulation</button>
+   </div>
+</div>
+
+
+
 {% endblock %}

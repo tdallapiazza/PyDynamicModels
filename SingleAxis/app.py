@@ -10,7 +10,9 @@ from pymodbus.client import ModbusTcpClient
 from flask import Flask, render_template, Response, request, jsonify
 
 app = Flask(__name__)
-global axis1
+global axis1, isRunning, isConnected
+isRunning = False
+isConnected = False
 axis1 = axis.BidirectionalConstSpeedAxis(0.01, 0.2, [0.0, 1.8])
 axis1.start()
 
@@ -38,20 +40,49 @@ def ex2():
 @app.route('/connect', methods=['POST'])
 def connect():
     res = False
+    global isConnected
     if not('client' in globals()):
         global client
     try:
         if client.connected:
-            print("already connected")
+            print("already connected so disconnect")
             client.close()
             del client
+            isConnected = False
     except:
-        client = ModbusTcpClient(host=request.form['address'])
+        sp=request.form['address'].split(':')
+        if len(sp)==1:
+            client = ModbusTcpClient(host=sp[0])
+        else:
+            client = ModbusTcpClient(host=sp[0], port=sp[1])
         print('Connecting to master')
         res=client.connect()
+        if res:   
+            isConnected = True
+        else:
+            del client
+            isConnected = False
     return {'success': res}
 
-    
+@app.route('/startSim', methods=['POST'])
+def startSim():
+    axis1.start()
+    global isRunning
+    isRunning=True
+    return {'success': True}
+
+@app.route('/stopSim', methods=['POST'])
+def stopSim():
+    axis1.stop()
+    global isRunning
+    isRunning=False
+    return {'success': True}
+
+@app.route('/resetSim', methods=['POST'])
+def resetSim():
+    axis1.reset()
+    return {'success': True}
+
 @app.route('/checkConnect')
 def check_connect():
     return Response(
@@ -59,18 +90,19 @@ def check_connect():
         mimetype='text/event-stream'
     )
     
-
 def connection_checker():
-    while True:
+    while isConnected:
         res = False
         if 'client' in globals():
             if client.connected:
                 res=True
         time.sleep(1.0)
         yield f"data: {res}\n\n"
+    yield "data: finished\n\n"
 
 @app.route('/runSim')
 def run():
+    
     return Response(
         read_state(),  # gen_date_time() is an Iterable
         mimetype='text/event-stream'  # mark as a stream response
@@ -78,12 +110,12 @@ def run():
 
 # a generator with yield expression
 def read_state():
-    while True:
+    while isRunning:
         time.sleep(0.01)
         # as we are in simulation, there is no physical inputs so we'll use coils to set interal and read internal values
         # first read model sensors and set the corresponding coils
         ret=''
-        if 'client' in globals():
+        if 'client' in globals() and isConnected:
             ad=0
             for output in axis1.digitalOut:
                 client.write_coil(ad, output)
@@ -97,4 +129,5 @@ def read_state():
             ret ='{} {} {} {} {}'.format(pos, axis1.digitalOut[0], axis1.digitalOut[1], axis1.run, axis1.reverse)
             # print(pos, end="   \r", flush=True)
         yield f"data: {ret}\n\n"
+    yield "data: finished\n\n"
         

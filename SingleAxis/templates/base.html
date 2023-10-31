@@ -197,22 +197,28 @@
                 function(data) {
                     if(data['success']){
                         var btn = document.getElementById('connect');
-                        btn.children[0].className= "fas fa-lock";
+                        
+                        //create the event for connection checker
+                        var source = new EventSource("/checkConnect");
+                        source.onmessage = function (event) {
+                            var btn = document.getElementById('connect');
+                            if(event.data==="finished"){
+                                source.close();
+                                btn.children[0].className= "fas fa-lock-open";
+                                return;
+                            }
+                            if(event.data==="True"){
+                                btn.children[0].className= "fas fa-lock";
+                            }else{
+                                btn.children[0].className= "fas fa-lock-open";
+                            }
+                        }
                     }
                 }
             );          
             return false;
         });
-        var source = new EventSource("/checkConnect");
-        source.onmessage = function (event) {
-            var btn = document.getElementById('connect');
-            
-            if(event.data==="True"){
-                btn.children[0].className= "fas fa-lock";
-            }else{
-                btn.children[0].className= "fas fa-lock-open";
-            }
-        }
+        
     </script>
 
 
