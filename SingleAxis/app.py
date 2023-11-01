@@ -21,21 +21,9 @@ axis1.start()
 def index():
     return render_template('dashboard.html')
 
-@app.route('/setup')
-def setup():
-    return render_template('setup.html')
-
-@app.route('/dashboard')
-def dashboard():
-    return render_template('dashboard.html')
-
-@app.route('/exercice1')
-def ex1():
-    return render_template('exercice1.html')
-
-@app.route('/exercice2')
-def ex2():
-    return render_template('exercice2.html')
+@app.route('/<id>')
+def loadPage(id):
+    return render_template(id+'.html')
 
 @app.route('/connect', methods=['POST'])
 def connect():
