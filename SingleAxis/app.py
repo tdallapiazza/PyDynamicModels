@@ -19,7 +19,7 @@ axis1.start()
 
 @app.route('/')
 def index():
-    return render_template('dashboard.html')
+    return render_template('base.html')
 
 @app.route('/<id>')
 def loadPage(id):
@@ -84,7 +84,7 @@ def connection_checker():
         if 'client' in globals():
             if client.connected:
                 res=True
-        time.sleep(1.0)
+        time.sleep(0.2)
         yield f"data: {res}\n\n"
     yield "data: finished\n\n"
 

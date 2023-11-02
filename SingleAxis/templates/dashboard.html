@@ -1,6 +1,6 @@
-{% extends 'base.html' %}
 
-{% block script %}
+
+{% block content %}
    <script type="text/javascript">
       // Start sim action
       $("#startSim").click(function(){
@@ -68,10 +68,10 @@
    <!--<script src="{{ url_for('static', filename='scripts/chart-area-demo.js')}}"></script>-->
    <!--<script src="{{ url_for('static', filename='scripts/chart-pie-demo.js')}}"></script>
        <script src="{{ url_for('static', filename='scripts/chart-bar-demo.js')}}"></script> -->
-{% endblock %}
 
 
-{% block content %}
+
+
 
 <!-- Page Heading -->
 <h1 class="h3 mb-2 text-gray-800">{% block title %}Tableau de bord{% endblock %}</h1>
