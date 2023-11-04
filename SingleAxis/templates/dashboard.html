@@ -6,10 +6,6 @@
       $("#startSim").click(function(){
          $.post("/startSim", function(data){
             if(data['success']){
-               $("#stopSim").prop('disabled', false);
-               $("#startSim").prop('disabled', true);
-               $("#resetSim").prop('disabled', true);
-
                // Finally creat the event listenner
                var source = new EventSource("/runSim");
                source.onmessage = function (event) {
@@ -46,16 +42,12 @@
          
       });
       $("#stopSim").click(function(){
-         $.post("/stopSim", function(data){
-            if(data['success']){
-               $("#stopSim").prop('disabled', true);
-               $("#startSim").prop('disabled', false);
-               $("#resetSim").prop('disabled', false);
-            }
-         });
+         $.post("/stopSim");
       });
       $("#resetSim").click(function(){
-         $.post("/resetSim");
+         $.post("/resetSim", function(data){
+            $('#position').text('0.0');
+         });
       });
 
       
@@ -138,9 +130,9 @@
 <h2 class="h4 mb-2 text-gray-800">Contrôle du système</h2>
 <div class="row">
    <div class="col-lg-6">
-      <button type="button" class="btn btn-primary" id="startSim">Start simulation</button>
-      <button type="button" class="btn btn-primary" id="resetSim">Reset simulation</button>
-      <button type="button" class="btn btn-primary" id="stopSim" disabled>Stop simulation</button>
+      <button type="button" class="btn btn-primary" id="startSim" >Start simulation</button>
+      <button type="button" class="btn btn-primary" id="resetSim" >Reset simulation</button>
+      <button type="button" class="btn btn-primary" id="stopSim" >Stop simulation</button>
    </div>
 </div>
 

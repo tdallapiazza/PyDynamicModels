@@ -28,29 +28,29 @@ def loadPage(id):
 @app.route('/connect', methods=['POST'])
 def connect():
     res = False
-    global isConnected
-    if not('client' in globals()):
-        global client
-    try:
-        if client.connected:
-            print("already connected so disconnect")
-            client.close()
-            del client
-            isConnected = False
-    except:
-        sp=request.form['address'].split(':')
-        if len(sp)==1:
-            client = ModbusTcpClient(host=sp[0])
-        else:
-            client = ModbusTcpClient(host=sp[0], port=sp[1])
-        print('Connecting to master')
-        res=client.connect()
-        if res:   
-            isConnected = True
-        else:
-            del client
-            isConnected = False
+    global client, isConnected
+    sp=request.form['address'].split(':')
+    if len(sp)==1:
+        client = ModbusTcpClient(host=sp[0])
+    else:
+        client = ModbusTcpClient(host=sp[0], port=sp[1])
+    print('Connecting to master')
+    res=client.connect()
+    if res:   
+        isConnected = True
+    else:
+        isConnected = False
     return {'success': res}
+
+@app.route('/disconnect', methods=['POST'])
+def disconnect():
+    global client, isConnected, isRunning
+    if isRunning:
+        stopSim()
+        resetSim()
+    client.close()
+    isConnected = False
+    return {'success': True}
 
 @app.route('/startSim', methods=['POST'])
 def startSim():
@@ -79,6 +79,7 @@ def check_connect():
     )
     
 def connection_checker():
+    global client
     while isConnected:
         res = False
         if 'client' in globals():
@@ -98,24 +99,23 @@ def run():
 
 # a generator with yield expression
 def read_state():
-    while isRunning:
+    while isRunning and isConnected:
         time.sleep(0.01)
         # as we are in simulation, there is no physical inputs so we'll use coils to set interal and read internal values
         # first read model sensors and set the corresponding coils
-        ret=''
-        if 'client' in globals() and isConnected:
-            ad=0
-            for output in axis1.digitalOut:
-                client.write_coil(ad, output)
-                ad+=1
-            # then apply the commands if any
-            rr = client.read_coils(2,2)
-            axis1.run = True if rr.bits[0] else False
-            axis1.reverse = True if rr.bits[1] else False
-            pos = "%.2f"%axis1.pos
-            # formating the response
-            ret ='{} {} {} {} {}'.format(pos, axis1.digitalOut[0], axis1.digitalOut[1], axis1.run, axis1.reverse)
-            # print(pos, end="   \r", flush=True)
+        ret='0.0'
+        ad=0
+        for output in axis1.digitalOut:
+            client.write_coil(ad, output)
+            ad+=1
+        # then apply the commands if any
+        rr = client.read_coils(2,2)
+        axis1.run = True if rr.bits[0] else False
+        axis1.reverse = True if rr.bits[1] else False
+        pos = "%.2f"%axis1.pos
+        # formating the response
+        ret ='{} {} {} {} {}'.format(pos, axis1.digitalOut[0], axis1.digitalOut[1], axis1.run, axis1.reverse)
+        # print(pos, end="   \r", flush=True)
         yield f"data: {ret}\n\n"
     yield "data: finished\n\n"
         

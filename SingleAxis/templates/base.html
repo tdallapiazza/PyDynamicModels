@@ -91,9 +91,6 @@
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
 
-            <!-- Main Content -->
-            <div>
-
                 <!-- Topbar -->
                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
 
@@ -162,9 +159,6 @@
                 </div>
                 <!-- /.container-fluid -->
 
-            </div>
-            <!-- End of Main Content -->
-
             <!-- Footer -->
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
@@ -197,35 +191,63 @@
     <script src="{{ url_for('static', filename='scripts/sb-admin-2.min.js')}}"></script>
 
     <script type=text/javascript>
-        $('#connect').on('click', function(e) {
-            $('#connecting').show();
-            $.post('/connect',
-                {
-                    address: $('#address').val()
-                },
+        // disconnect on load / reload
+        var connected = false;
+        $(function() {
+            //force disconnect
+            $.post('/disconnect',
                 function(data) {
                     $('#connecting').hide();
                     if(data['success']){
-                        //create the event for connection checker
-                        var source = new EventSource("/checkConnect");
-                        source.onmessage = function (event) {
-                            var btn = document.getElementById('connect');
-                            if(event.data==="finished"){
-                                source.close();
-                                btn.children[0].className= "fas fa-lock-open";
-                                return;
-                            }
-                            if(event.data==="True"){
-                                btn.children[0].className= "fas fa-lock";
-                            }else{
-                                btn.children[0].className= "fas fa-lock-open";
+                        connected=false;
+                    }
+                });
+        });
+
+        $('#connect').click(function connect() {
+            if(!connected){
+                $('#connecting').text='Connecting...';
+                $('#connecting').show();
+                $.post('/connect',
+                    {
+                        address: $('#address').val()
+                    },
+                    function(data) {
+                        $('#connecting').hide();
+                        if(data['success']){
+                            connected=true;
+                            //create the event for connection checker
+                            var source = new EventSource("/checkConnect");
+                            source.onmessage = function (event) {
+                                var btn = document.getElementById('connect');
+                                if(event.data==="finished"){
+                                    source.close();
+                                    btn.children[0].className= "fas fa-lock-open";
+                                    return;
+                                }
+                                if(event.data==="True"){
+                                    btn.children[0].className= "fas fa-lock";
+                                }else{
+                                    btn.children[0].className= "fas fa-lock-open";
+                                }
                             }
                         }
                     }
-                }
-            );          
-            return false;
+                );
+            }else{
+                $('#connecting').text='Disconnecting...';
+                $('#connecting').show();
+                $.post('/disconnect',
+                    function(data) {
+                        $('#connecting').hide();
+                        if(data['success']){
+                            connected=false;
+                        }
+                    }
+                );
+            }
         });
+
 
         $("#ldashboard").on("click",function(e){
             e.preventDefault();
