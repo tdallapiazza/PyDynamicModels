@@ -16,6 +16,8 @@
                   }
                   var pos = document.getElementById('position');
                   pos.textContent =myArray[0];
+                  var translate_mm = parseFloat(myArray[0])*1000;
+                  $("#chariot").attr("transform", "translate("+translate_mm+" 0.0)");
                   if(myArray[1]==="True"){
                      document.getElementById('capteur1').className = "fas fa-toggle-on fa-2x text-success ";
                   }else{
@@ -70,8 +72,78 @@
 <h2 class="h4 mb-2 text-gray-800">État du système</h2>
 <!-- Content Row -->
 <div class="row">
+   <div class="col-xl-12 col-md-6 mb-4">
+      <div class="card border-left-primary shadow h-100 py-2">
+         <div class="card-body">
+            <div class="row no-gutters align-items-center">
+                  <div class="col mr-2">
+                     <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                        Représentation graphique</div>
+                        <div class="col-auto">
+                           <svg
+                              width="100%"
+                              height="100%"
+                              viewBox="0 0 2000 150"
+                              version="1.1"
+                              id="svg5"
+                              xml:space="preserve"
+                              xmlns:xlink="http://www.w3.org/1999/xlink"
+                              xmlns="http://www.w3.org/2000/svg"
+                              xmlns:svg="http://www.w3.org/2000/svg"><defs
+                              id="defs2"><linearGradient
+                                 id="linearGradient12114"><stop
+                                    style="stop-color:#d5d5d5;stop-opacity:0.90615827;"
+                                    offset="0"
+                                    id="stop12110" /><stop
+                                    style="stop-color:#bfbfbf;stop-opacity:1;"
+                                    offset="0.5"
+                                    id="stop12205" /><stop
+                                    style="stop-color:#d5d5d5;stop-opacity:0.92082113;"
+                                    offset="1"
+                                    id="stop12112" /></linearGradient><linearGradient
+                                 xlink:href="#linearGradient12114"
+                                 id="linearGradient12116"
+                                 x1="1990.2913"
+                                 y1="51.779938"
+                                 x2="8.0906153"
+                                 y2="48.54369"
+                                 gradientUnits="userSpaceOnUse" /></defs>
+                              <g id="layer1">
+                                 <rect
+                                 style="fill:url(#linearGradient12116);stroke:#000000;stroke-width:3;stroke-miterlimit:0;stroke-dasharray:none;stroke-opacity:1;fill-opacity:1"
+                                 id="rect294"
+                                 width="1997"
+                                 height="47"
+                                 x="1.5"
+                                 y="31.5" /><circle
+                                 style="fill:#345bcc;fill-opacity:1;stroke:#000000;stroke-width:3;stroke-miterlimit:0;stroke-dasharray:none;stroke-opacity:1"
+                                 id="path1818"
+                                 cx="98.5"
+                                 cy="126.5"
+                                 r="20" /><circle
+                                 style="fill:#345bcc;fill-opacity:1;stroke:#000000;stroke-width:3;stroke-miterlimit:0;stroke-dasharray:none;stroke-opacity:1"
+                                 id="path1818-7"
+                                 cx="1898.5"
+                                 cy="126.5"
+                                 r="20" />
+                                 <g id="chariot" transform="translate(0.0 0.0)">
+                                    <path
+                                    style="fill:#a4a4a4;stroke:#000000;stroke-width:3;stroke-miterlimit:0"
+                                    d="m 48.5,21.5 h 100 v 70 h -25 L 98.5,103.23139 73.5,91.5 h -25 z" />
+                                 </g>
+                              </g>
+                           </svg>
+                        </div>
+                  </div>   
+            </div>
+         </div>
+      </div>
+</div>
+</div>
+
+<div class="row">
    <!-- Position as a card-->
-   <div class="col-xl-3 col-md-6 mb-4">
+   <div class="col-xl-4 col-md-6 mb-4">
          <div class="card border-left-primary shadow h-100 py-2">
             <div class="card-body">
                <div class="row no-gutters align-items-center">
@@ -87,7 +159,7 @@
             </div>
          </div>
    </div>
-   <div class="col-xl-3 col-md-6 mb-4">
+   <div class="col-xl-4 col-md-6 mb-4">
          <div class="card border-left-primary shadow h-100 py-2">
             <div class="card-body">
                <div class="row no-gutters align-items-center">
@@ -106,7 +178,7 @@
             </div>
          </div>
    </div>
-   <div class="col-xl-3 col-md-6 mb-4">
+   <div class="col-xl-4 col-md-6 mb-4">
          <div class="card border-left-primary shadow h-100 py-2">
             <div class="card-body">
                <div class="row no-gutters align-items-center">
