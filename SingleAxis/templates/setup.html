@@ -2,5 +2,64 @@
 
 {% block content %}
     <h1 class="h3 mb-2 text-gray-800">{% block title %}Axe simple - configuration{% endblock %}</h1>
-    <p class="mb-4">Ce modèle comporte un chariot se déplacant sur un rail à vitesse fixe. Il comporte deux capteurs de présence pour signaler les bouts de course.</p>
+    <img class="col-md-12 mb-4" src="{{ url_for('static', filename='ressources/Chariot.png')}}"/>
+    <p class="mb-4">
+        Ce modèle comporte un chariot se déplacant sur un rail. Il comporte deux capteurs inductifs détectant la présence du chariot en bouts de course.
+        Le chariot est déplacé par une vis à bille entraînée par un moteur asynchrone piloté par un contrôleur.</p>
+    <p class="mb-4">
+        Ce contrôleur dispose de deux entrées digitales de commande.
+        La première pour
+        enclancher/déclancher le moteur et la seconde pour inverser la dirrection. Afin de déplacer le chariot de gauche à droite, la première entrée doit être à 1 et la seconde à 0. Pour 
+        déplacer le chariot de droite à gauche, la première entrée doit être à 1 et la seconde également à 1 (sens inversé).
+    </p>
+    <p class="mb-4">
+        Le système est piloté par un API comportant une interface Modbus. Le tableau suivant donne les adresses physiques des différents inputs/outputs et leur position dans
+        la trame Modbus.</p>
+
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Adressage Modbus</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Description</th>
+                            <th>Adresse physique</th>
+                            <th>Type Modbus</th>
+                            <th>Adresse message modbus</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Capteur inductif position début</td>
+                            <td>%IX0.0</td>
+                            <td>Discrete Input</td>
+                            <td>0x00</td>
+                        </tr>
+                        <tr>
+                            <td>Capteur inductif position fin</td>
+                            <td>%IX0.1</td>
+                            <td>Discrete Input</td>
+                            <td>0x01</td>
+                        </tr>
+                        <tr>
+                            <td>Commande moteur marche</td>
+                            <td>%QX0.0</td>
+                            <td>Coil</td>
+                            <td>0x00</td>
+                        </tr>
+                        <tr>
+                            <td>Inversion moteur</td>
+                            <td>%QX0.1</td>
+                            <td>Coil</td>
+                            <td>0x01</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
 {% endblock %}
