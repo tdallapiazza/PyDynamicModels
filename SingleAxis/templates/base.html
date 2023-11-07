@@ -116,8 +116,8 @@
                         </div>
                         
                     </form>
-                    <div class="ml-2 align-items-center" id="connecting" style="display:none">
-                        <span class="ml-2 text-gray-600 small ">Connecting...</span>
+                    <div class="ml-2 align-items-center" >
+                        <span class="ml-2 text-gray-600 small" id="connecting" style="display:none">Connecting...</span>
                     </div>
 
                     <!-- Topbar Navbar -->
@@ -206,7 +206,7 @@
 
         $('#connect').click(function connect() {
             if(!connected){
-                $('#connecting').text='Connecting...';
+                $('#connecting').text('Connecting...');
                 $('#connecting').show();
                 $.post('/connect',
                     {
@@ -235,7 +235,7 @@
                     }
                 );
             }else{
-                $('#connecting').text='Disconnecting...';
+                $('#connecting').text('Disconnecting...');
                 $('#connecting').show();
                 $.post('/disconnect',
                     function(data) {
