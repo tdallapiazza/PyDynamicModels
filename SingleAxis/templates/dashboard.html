@@ -52,6 +52,50 @@
          });
       });
 
+      $("#ctrlMan").click(function(){
+         $("#ctrlMan").addClass('btn-primary');
+         $("#ctrlMan").removeClass('btn-secondary');
+         $("#ctrlAuto").removeClass('btn-primary');
+         $("#ctrlAuto").addClass('btn-secondary');
+         $.post("/ctrlAuto",{data: 'false'});
+      });
+      $("#ctrlAuto").click(function(){
+         $("#ctrlAuto").addClass('btn-primary');
+         $("#ctrlAuto").removeClass('btn-secondary');
+         $("#ctrlMan").removeClass('btn-primary');
+         $("#ctrlMan").addClass('btn-secondary');
+         $.post("/ctrlAuto",{data: 'true'});
+      });
+
+      $("#ctrlStart").click(function(){
+         $("#ctrlStart").addClass('btn-primary');
+         $("#ctrlStart").removeClass('btn-secondary');
+         $("#ctrlStop").removeClass('btn-primary');
+         $("#ctrlStop").addClass('btn-secondary');
+         $.post("/ctrlRun",{data: 'true'});
+      });
+      $("#ctrlStop").click(function(){
+         $("#ctrlStop").addClass('btn-primary');
+         $("#ctrlStop").removeClass('btn-secondary');
+         $("#ctrlStart").removeClass('btn-primary');
+         $("#ctrlStart").addClass('btn-secondary');
+         $.post("/ctrlRun",{data: 'false'});
+      });
+
+      $("#ctrlLeft").on("mousedown", function(){
+         $.post("/ctrlLeft",{data: 'true'});
+      });
+      $("#ctrlLeft").on("mouseup mouseleave", function(){
+         $.post("/ctrlLeft",{data: 'false'});
+      });
+
+      $("#ctrlRight").on("mousedown", function(){
+         $.post("/ctrlRight",{data: 'true'});
+      });
+      $("#ctrlRight").on("mouseup mouseleave", function(){
+         $.post("/ctrlRight",{data: 'false'});
+      });
+
       
    </script>
 
@@ -69,6 +113,16 @@
 
 <!-- Page Heading -->
 <h1 class="h3 mb-2 text-gray-800">{% block title %}Tableau de bord{% endblock %}</h1>
+<h2 class="h4 mb-2 text-gray-800">Contrôle de la simulation</h2>
+<div class="row">
+   <div class="col-lg-6, col-md-12">
+      <div class="btn-group" role="group">
+         <button type="button" class="btn btn-primary btn-sm mb-2" id="startSim" >Start simulation</button>
+         <button type="button" class="btn btn-primary btn-sm mb-2" id="resetSim" >Reset simulation</button>
+         <button type="button" class="btn btn-primary btn-sm mb-2" id="stopSim" >Stop simulation</button>
+      </div>
+   </div>
+</div>
 <h2 class="h4 mb-2 text-gray-800">État du système</h2>
 <!-- Content Row -->
 <div class="row">
@@ -143,7 +197,7 @@
 
 <div class="row">
    <!-- Position as a card-->
-   <div class="col-xl-4 col-md-6 mb-4">
+   <div class="col-xl-3 col-md-6 mb-4">
          <div class="card border-left-primary shadow h-100 py-2">
             <div class="card-body">
                <div class="row no-gutters align-items-center">
@@ -159,10 +213,10 @@
             </div>
          </div>
    </div>
-   <div class="col-xl-4 col-md-6 mb-4">
+   <div class="col-xl-3 col-md-6 mb-4">
          <div class="card border-left-primary shadow h-100 py-2">
             <div class="card-body">
-               <div class="row no-gutters align-items-center">
+               <div class="row no-gutters">
                      <div class="col mr-2">
                         <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                            Capteurs fin de course</div>
@@ -178,13 +232,13 @@
             </div>
          </div>
    </div>
-   <div class="col-xl-4 col-md-6 mb-4">
+   <div class="col-xl-3 col-md-6 mb-4">
          <div class="card border-left-primary shadow h-100 py-2">
             <div class="card-body">
-               <div class="row no-gutters align-items-center">
+               <div class="row no-gutters">
                      <div class="col mr-2">
                         <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                           Commandes moteur</div>
+                           Commandes contrôleur moteur</div>
                         <div class="h5 mb-0 font-weight-bold text-gray-800">Marche:</div>
                         <div class="h5 mb-0 font-weight-bold text-gray-800"><i class="fas fa-toggle-off fa-2x text-gray-800" id="moteur"></i></div>
                         <div class="h5 mb-0 font-weight-bold text-gray-800">Sens inversé:</div>
@@ -198,15 +252,45 @@
       
          </div>
    </div>
+   <div class="col-xl-3 col-md-6 mb-4">
+      <div class="card border-left-primary shadow h-100 py-2">
+         <div class="card-body">
+            <div class="row no-gutters">
+                  <div class="col mr-2">
+                     <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                        Commandes opérateur</div>
+                     <div class="h5 mb-0 font-weight-bold text-gray-800">Mode:</div>
+                     <div class="h5 mb-0 font-weight-bold text-gray-800">
+                        <div class="btn-group" role="group">
+                           <button type="button" class="btn btn-primary  mb-2" data-bs-toggle="button" autocomplete="off" id="ctrlMan">Manuel</button>
+                           <button type="button" class="btn btn-primary  mb-2" data-bs-toggle="button" autocomplete="off" id="ctrlAuto">Auto</button>
+                        </div>
+                     </div>
+                     <div class="h5 mb-0 font-weight-bold text-gray-800">Contrôle manuel:</div>
+                     <div class="h5 mb-0 font-weight-bold text-gray-800">
+                        <div class="btn-group" role="group">
+                           <button type="button" class="btn btn-primary mb-2" id="ctrlLeft" ><i class="fas fa-angle-left fa-2x"></i></button>
+                           <button type="button" class="btn btn-primary mb-2" id="ctrlRight" ><i class="fas fa-angle-right fa-2x"></i></button>
+                        </div>
+                     </div>
+                     <div class="h5 mb-0 font-weight-bold text-gray-800">Contrôle auto.:</div>
+                     <div class="h5 mb-0 font-weight-bold text-gray-800">
+                        <div class="btn-group" role="group">
+                           <button type="button" class="btn btn-primary mb-2" data-bs-toggle="button" autocomplete="off" id="ctrlStart" >Marche</button>
+                           <button type="button" class="btn btn-primary mb-2" data-bs-toggle="button" autocomplete="off" id="ctrlStop" >Arrêt</button>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="col-auto">
+                     <i class="fas fa-fw fa-cog fa-2x text-gray-300"></i>
+                  </div>
+            </div>
+         </div>
+   
+      </div>
 </div>
-<h2 class="h4 mb-2 text-gray-800">Contrôle du système</h2>
-<div class="row">
-   <div class="col-lg-6, col-md-12">
-      <button type="button" class="btn btn-primary mb-2" id="startSim" >Start simulation</button>
-      <button type="button" class="btn btn-primary mb-2" id="resetSim" >Reset simulation</button>
-      <button type="button" class="btn btn-primary mb-2" id="stopSim" >Stop simulation</button>
-   </div>
 </div>
+
 
 
 

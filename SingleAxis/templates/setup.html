@@ -13,6 +13,11 @@
         déplacer le chariot de droite à gauche, la première entrée doit être à 1 et la seconde également à 1 (sens inversé).
     </p>
     <p class="mb-4">
+        L modèle dispose en plus de deux boutons à bascule, le premier pour le mode automatique ou manuel, le second pour l'enclancement
+        et le déclenchement en mode automatique. Pour le mode manuel, deux boutons poussoirs sont également disponnibles pour le pilotage
+        manuel du chariot.
+    </p>
+    <p class="mb-4">
         Le système est piloté par un API comportant une interface Modbus. Le tableau suivant donne les adresses physiques des différents inputs/outputs et leur position dans
         la trame Modbus.</p>
 
@@ -43,6 +48,30 @@
                             <td>%IX0.1</td>
                             <td>Discrete Input</td>
                             <td>0x01</td>
+                        </tr>
+                        <tr>
+                            <td>Bascule mode automatique</td>
+                            <td>%IX0.2</td>
+                            <td>Discrete Input</td>
+                            <td>0x02</td>
+                        </tr>
+                        <tr>
+                            <td>Bouton Mouvement à gauche</td>
+                            <td>%IX0.3</td>
+                            <td>Discrete Input</td>
+                            <td>0x03</td>
+                        </tr>
+                        <tr>
+                            <td>Bouton Mouvement à droite</td>
+                            <td>%IX0.4</td>
+                            <td>Discrete Input</td>
+                            <td>0x04</td>
+                        </tr>
+                        <tr>
+                            <td>Bascule marche / arrêt</td>
+                            <td>%IX0.5</td>
+                            <td>Discrete Input</td>
+                            <td>0x05</td>
                         </tr>
                         <tr>
                             <td>Commande moteur marche</td>

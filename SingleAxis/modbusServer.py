@@ -37,7 +37,7 @@ class SingleAxisModbusServer():
 
     def setup_server(self, host, port):
 
-        di = ModbusSequentialDataBlock(0x01, [0] * 2)
+        di = ModbusSequentialDataBlock(0x01, [0] * 6)
         co = ModbusSequentialDataBlock(0x01, [0] * 2)
         context = ModbusSlaveContext(
             di=di, co=co

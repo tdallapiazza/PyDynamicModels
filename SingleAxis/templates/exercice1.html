@@ -1,7 +1,22 @@
 
 
 {% block content %}
-    <h1 class="h3 mb-2 text-gray-800">{% block title %}Exercice 1{% endblock %}</h1>
-    <p class="mb-4">Faire circuler le chariot d'avant en arrière en continu. La variable de marche est mise à 1 au démarrage et n'est plus modifiée par la suite.</p>
-    <p class="mb-4">Le code doit être fait en Ladder et en Grafcet</p>
+    <h1 class="h3 mb-2 text-gray-800">Exercice 1: Mode manuel</h1>
+    <p class="mb-4">En mode manuel, le chariot doit pouvoir être piloté vers la gauche ou vers la droite
+        en maintenant les boutons de commande appuiés. Cette possibilité doit être active uniquement lorsque la bascule
+        de sélection du mode est sur "Automatique".
+    </p>
+    <div class="card mb-4">
+        <div class="card-header">
+            Consignes
+        </div>
+        <div class="card-body">
+            <ul>
+                <li>Installer et se familiariser avec OpenPLC</li>
+                <li>Lancer le runtime et enregistrer le noeud modbus du simulateur</li>
+                <li>Écrire un programme Ladder permettant le déplacement manuel du chariot</li>
+                <li>Charger ce programme dans le runtime OpenPLC et vérifier le fonctionnement</li>
+            </ul>
+        </div>
+    </div>
 {% endblock %}

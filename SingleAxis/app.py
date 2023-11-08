@@ -115,3 +115,50 @@ def read_state():
         yield f"data: {ret}\n\n"
     yield "data: finished\n\n"
         
+@app.route('/ctrlAuto', methods=['POST'])
+def setMode():
+    global server
+    res=False
+    if 'server' in globals():
+        res=True
+        if request.form['data']=='true':
+            server.args.context[0].setValues(2, 0x02, [True])
+        else:
+            server.args.context[0].setValues(2, 0x02, [False])
+    return {'success': res}
+
+@app.route('/ctrlRun', methods=['POST'])
+def setRun():
+    global server
+    res=False
+    if 'server' in globals():
+        res=True
+        if request.form['data']=='true':
+            server.args.context[0].setValues(2, 0x05, [True])
+        else:
+            server.args.context[0].setValues(2, 0x05, [False])
+    return {'success': res}
+
+@app.route('/ctrlLeft', methods=['POST'])
+def setLeft():
+    global server
+    res=False
+    if 'server' in globals():
+        res=True
+        if request.form['data']=='true':
+            server.args.context[0].setValues(2, 0x03, [True])
+        else:
+            server.args.context[0].setValues(2, 0x03, [False])
+    return {'success': res}
+
+@app.route('/ctrlRight', methods=['POST'])
+def setRight():
+    global server
+    res=False
+    if 'server' in globals():
+        res=True
+        if request.form['data']=='true':
+            server.args.context[0].setValues(2, 0x04, [True])
+        else:
+            server.args.context[0].setValues(2, 0x04, [False])
+    return {'success': res}
