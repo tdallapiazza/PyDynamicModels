@@ -3,11 +3,8 @@ import sys
 # setting path
 sys.path.append('../')
 
-import os
-import asyncio
 import time
 import models.BidirectionalConstSpeedAxis as axis
-from pymodbus.client import ModbusTcpClient
 from flask import Flask, render_template, Response, request, jsonify
 from modbusServer import SingleAxisModbusServer
 
