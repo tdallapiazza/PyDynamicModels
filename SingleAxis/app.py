@@ -15,7 +15,7 @@ app = Flask(__name__)
 global axis1, isRunning, isConnected
 isRunning = False
 isConnected = False
-axis1 = axis.BidirectionalConstSpeedAxis(0.01, 0.2, [0.0, 1.8])
+axis1 = axis.BidirectionalConstSpeedAxis(0.005, 0.6, [0.0, 1.8])
 axis1.start()
 
 @app.route('/')
@@ -108,7 +108,7 @@ def read_state():
 
         axis1.run = True if values[0] else False
         axis1.reverse = True if values[1] else False
-        pos = "%.2f"%axis1.pos
+        pos = "%.3f"%axis1.pos
         # formating the response
         ret ='{} {} {} {} {}'.format(pos, axis1.digitalOut[0], axis1.digitalOut[1], axis1.run, axis1.reverse)
         # print(pos, end="   \r", flush=True)

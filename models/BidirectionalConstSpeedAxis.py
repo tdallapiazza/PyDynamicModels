@@ -48,8 +48,8 @@ class BidirectionalConstSpeedAxis(object):
                 self.digitalOut[i]=False
 
         # History append
-        self.histPos.append(self.pos)
-        self.histTime.append(self.time)
+        #self.histPos.append(self.pos)
+        #self.histTime.append(self.time)
 
 
     def start(self):
