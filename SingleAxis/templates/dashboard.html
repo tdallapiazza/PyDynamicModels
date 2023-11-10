@@ -29,11 +29,16 @@
                      document.getElementById('capteur2').className = "fas fa-toggle-off fa-2x text-gray-800";
                   }
                   if(myArray[3]==="True"){
+                     document.getElementById('capteur3').className = "fas fa-toggle-on fa-2x text-success ";
+                  }else{
+                     document.getElementById('capteur3').className = "fas fa-toggle-off fa-2x text-gray-800";
+                  }
+                  if(myArray[4]==="True"){
                      document.getElementById('moteur').className = "fas fa-toggle-on fa-2x text-success ";
                   }else{
                      document.getElementById('moteur').className = "fas fa-toggle-off fa-2x text-gray-800";
                   }
-                  if(myArray[4]==="True"){
+                  if(myArray[5]==="True"){
                      document.getElementById('reverse').className = "fas fa-toggle-on fa-2x text-success ";
                   }else{
                      document.getElementById('reverse').className = "fas fa-toggle-off fa-2x text-gray-800";
@@ -179,6 +184,11 @@
                                  id="path1818-7"
                                  cx="1898.5"
                                  cy="126.5"
+                                 r="20" /><circle
+                                 style="fill:#345bcc;fill-opacity:1;stroke:#000000;stroke-width:3;stroke-miterlimit:0;stroke-dasharray:none;stroke-opacity:1"
+                                 id="path1818-7"
+                                 cx="998.5"
+                                 cy="126.5"
                                  r="20" />
                                  <g id="chariot" transform="translate(0.0 0.0)">
                                     <path
@@ -222,8 +232,10 @@
                            Capteurs fin de course</div>
                         <div class="h5 mb-0 font-weight-bold text-gray-800">Capteur début:</div>
                         <div class="h5 mb-0 font-weight-bold text-gray-800"><i class="fas fa-toggle-off fa-2x text-gray-800" id="capteur1"></i></div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">Capteur fin:</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">Capteur milieu:</div>
                         <div class="h5 mb-0 font-weight-bold text-gray-800"><i class="fas fa-toggle-off fa-2x text-gray-800" id="capteur2"></i></div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">Capteur fin:</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800"><i class="fas fa-toggle-off fa-2x text-gray-800" id="capteur3"></i></div>
                      </div>
                      <div class="col-auto">
                         <i class="fas fa-step-forward fa-2x text-gray-300"></i>

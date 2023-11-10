@@ -15,7 +15,7 @@ app = Flask(__name__)
 global axis1, isRunning, isConnected
 isRunning = False
 isConnected = False
-axis1 = axis.BidirectionalConstSpeedAxis(0.005, 0.6, [0.0, 1.8])
+axis1 = axis.BidirectionalConstSpeedAxis(0.005, 0.6, [0.0, 0.9, 1.8])
 axis1.start()
 
 @app.route('/')
@@ -110,7 +110,7 @@ def read_state():
         axis1.reverse = True if values[1] else False
         pos = "%.3f"%axis1.pos
         # formating the response
-        ret ='{} {} {} {} {}'.format(pos, axis1.digitalOut[0], axis1.digitalOut[1], axis1.run, axis1.reverse)
+        ret ='{} {} {} {} {} {}'.format(pos, axis1.digitalOut[0], axis1.digitalOut[1],axis1.digitalOut[2], axis1.run, axis1.reverse)
         # print(pos, end="   \r", flush=True)
         yield f"data: {ret}\n\n"
     yield "data: finished\n\n"
@@ -122,9 +122,9 @@ def setMode():
     if 'server' in globals():
         res=True
         if request.form['data']=='true':
-            server.args.context[0].setValues(2, 0x02, [True])
+            server.args.context[0].setValues(2, 0x03, [True])
         else:
-            server.args.context[0].setValues(2, 0x02, [False])
+            server.args.context[0].setValues(2, 0x03, [False])
     return {'success': res}
 
 @app.route('/ctrlRun', methods=['POST'])
@@ -134,9 +134,9 @@ def setRun():
     if 'server' in globals():
         res=True
         if request.form['data']=='true':
-            server.args.context[0].setValues(2, 0x05, [True])
+            server.args.context[0].setValues(2, 0x06, [True])
         else:
-            server.args.context[0].setValues(2, 0x05, [False])
+            server.args.context[0].setValues(2, 0x06, [False])
     return {'success': res}
 
 @app.route('/ctrlLeft', methods=['POST'])
@@ -146,9 +146,9 @@ def setLeft():
     if 'server' in globals():
         res=True
         if request.form['data']=='true':
-            server.args.context[0].setValues(2, 0x03, [True])
+            server.args.context[0].setValues(2, 0x04, [True])
         else:
-            server.args.context[0].setValues(2, 0x03, [False])
+            server.args.context[0].setValues(2, 0x04, [False])
     return {'success': res}
 
 @app.route('/ctrlRight', methods=['POST'])
@@ -158,7 +158,7 @@ def setRight():
     if 'server' in globals():
         res=True
         if request.form['data']=='true':
-            server.args.context[0].setValues(2, 0x04, [True])
+            server.args.context[0].setValues(2, 0x05, [True])
         else:
-            server.args.context[0].setValues(2, 0x04, [False])
+            server.args.context[0].setValues(2, 0x05, [False])
     return {'success': res}
