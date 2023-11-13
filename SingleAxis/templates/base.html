@@ -73,6 +73,8 @@
                         <h6 class="collapse-header">Exercices basiques:</h6>
                         <a class="collapse-item" href="/exercice1" id="lex1">Exercice 1</a>
                         <a class="collapse-item" href="/exercice2" id="lex2">Exercice 2</a>
+                        <a class="collapse-item" href="/exercice3" id="lex3">Exercice 3</a>
+                        <a class="collapse-item" href="/exercice4" id="lex4">Exercice 4</a>
                     </div>
                 </div>
             </li>
@@ -276,6 +278,19 @@
             });
         });
         
+        $("#lex3").on("click",function(e){
+            e.preventDefault();
+            $.get("/exercice3", function( data ) {
+                $("#content").html(data);
+            });
+        });
+
+        $("#lex4").on("click",function(e){
+            e.preventDefault();
+            $.get("/exercice4", function( data ) {
+                $("#content").html(data);
+            });
+        });
     </script>
 
 
