@@ -2,22 +2,27 @@
 
 {% block content %}
     <h1 class="h3 mb-2 text-gray-800">Exercice 4: Fonctionnement avancé</h1>
-    <p class="mb-4">Replacer le grafcet par un programme en texte structuré en ajoutant un arrêt à la position centrale.
-        Cet arrêt a une durée fixe de 3 secondes. Dans cet interval de temps, l'opérateur peut choisir avec les
+    <p class="mb-4">Augmenter la complexité du mode automatique en ajoutant un arrêt à la position centrale.
+        Cet arrêt a une durée maximale de 3 secondes. Dans cet interval de temps, l'opérateur peut choisir avec les
         boutons de direction du mode manuel dans quelle direction va repartir le chariot. Le chariot repart dès l'action utilisateur
         sans attendre la fin de la temporisation.
     </p>
-    <p>Si aucun ordre n'est donné, le chariot reprend sa route dans la direction avant l'arêt central.</p>
-    <div class="card mb-4">
+    <p>Si aucun ordre n'est donné, le chariot reprend sa route dans la direction avant l'arêt central après le temps d'arrêt de 3 secondes. Contrairement
+        à l'exercice 3, il est souhaité ici que si le bouton d'arrêt est basculé durant les 3 secondes de pause, la temporisation soit également interrompue. Le temps 
+        restant est alors repris dès que le sélecteur repasse sur la position "marche".
+    </p>
+    <div class="card shadow mb-4">
         <div class="card-header">
             Consignes
         </div>
         <div class="card-body">
             <ul>
                 <li>Interfacer le capteur centrale (arrêt et temporisation)</li>
-                <li>Programer la nouvelle logique en Structured Text</li>
-                <li>Le mode manuel subsiste</li>
+                <li>Programer la nouvelle logique</li>
+                <li>Vérifier le nouveau fonctionnement du mode automatique</li>
+                <li>Vérifier ce qui se passe si le mode automatique est interrompu (bascule sur arrêt) durant la phase d'attente</li>
                 <li>L'arrêt et le démarrage du mode automatique subsiste</li>
+                <li>Le fonctionnement du mode manuel est inchangé</li>
             </ul>
         </div>
     </div>

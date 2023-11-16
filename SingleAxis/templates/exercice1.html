@@ -3,19 +3,28 @@
 {% block content %}
     <h1 class="h3 mb-2 text-gray-800">Exercice 1: Mode manuel</h1>
     <p class="mb-4">En mode manuel, le chariot doit pouvoir être piloté vers la gauche ou vers la droite
-        en maintenant les boutons de commande appuiés. Cette possibilité doit être active uniquement lorsque la bascule
-        de sélection du mode est sur "Automatique".
+        en maintenant les boutons de commande appuiés.
     </p>
-    <div class="card mb-4">
+    <p class="mb-4">Dans cette exercice, vous devrez mettre en place votre environnement d'API (Codesys ou autre)
+        en créant un appareil disposant d'une interface ModebusTCP. En effet, le simulateur expose l'état des ses entrées
+        digitales (capteurs / boutons) sur un serveur Modbus (esclave). Il en va de même pour les commandes (coils) par exemple la commande 
+        du moteur et l'inversion du sens.
+    </p>
+    <p class="mb-4">L'API qui pilotera le simulateur doit donc implémenter un client ModbusTCP (master) qui se connectera au serveur ModbusTCP du
+        simulateur et aura ainsi accès à l'état des inputs et aura la possibilité d'activer les coils (sorties digitales).
+    </p>
+    <p class="mb-4">La mise en place étant assez fastidieuse avec Codesys, un tutoriel donnant une explication pas à pas est disponnible 
+        <a class="link-opacity-75-hover" href="https://tdallapiazza.atlassian.net/wiki/spaces/~71202015d9d76a2596423da91a68279257bc6c/pages/5472258/Codesys+and+Python">ici</a>.
+    </p>
+    <div class="card shadow mb-4">
         <div class="card-header">
             Consignes
         </div>
         <div class="card-body">
             <ul>
-                <li>Installer et se familiariser avec OpenPLC</li>
-                <li>Lancer le runtime et enregistrer le noeud modbus du simulateur</li>
-                <li>Écrire un programme Ladder permettant le déplacement manuel du chariot</li>
-                <li>Charger ce programme dans le runtime OpenPLC et vérifier le fonctionnement</li>
+                <li>Mettre en place un appareil client ModbusTCP (typiquement en mode runtime)</li>
+                <li>Écrire un programme en ST (Structured Text) permettant le déplacement manuel du chariot à l'aide des boutons</li>
+                <li>Charger ce programme dans le runtime et vérifier le fonctionnement dans le simulateur</li>
             </ul>
         </div>
     </div>

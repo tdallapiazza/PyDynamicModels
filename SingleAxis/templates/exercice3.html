@@ -2,16 +2,24 @@
 
 {% block content %}
     <h1 class="h3 mb-2 text-gray-800">Exercice 3: Arrêt</h1>
-    <p class="mb-4">Ajouter un programme Lader pour arrêter et reprendre le fonctionnement du mode automatique.
-        Ce programme doit être prioritaire et mettre en pause le grafcet.
+    <p class="mb-4">Ajouter un programme ST prioritaire pour arrêter et reprendre le fonctionnement du mode automatique.
+        Ce programme doit être prioritaire et mettre en pause le déplacement du chariot. La façon proposée est de créer un
+        deuxième POU avec une priorité suppérieur qui annulera la sortie de la fonction automatique. Le mode manuel doit pouvoir
+        fonctionner indépendemment de la position de ce commutateur.
     </p>
-    <div class="card mb-4">
+    <p class="mb-4">Il est demandé que le basculement sur "arrêt" ne mette pas en pause la temporisation des arrêt en bout de course. Si l'arrêt
+        intervient dans une phase de pause et qu'il se prolonge au delà du temps restant de la temporisation, lorsque le bouton est basculé
+        sur "marche" le chariot repart dirrectement.
+    </p>
+    <div class="card shadow mb-4">
         <div class="card-header">
             Consignes
         </div>
         <div class="card-body">
             <ul>
-                <li>En mode automatique, interfacer le bouton start/stop</li>
+                <li>Interfacer le bouton start/stop</li>
+                <li>Vérifier le fonctionnement dans le mode automatique</li>
+                <li>Vérifier que le commutateur n'a pas d'impacte sur le mode manuel</li>
             </ul>
         </div>
     </div>

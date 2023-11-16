@@ -2,9 +2,10 @@
 
 {% block content %}
     <h1 class="h3 mb-2 text-gray-800">{% block title %}Axe simple - configuration{% endblock %}</h1>
-    <img class="col-md-12 mb-4" src="{{ url_for('static', filename='ressources/Chariot.png')}}"/>
+    <img class="col-md-8 mb-4" src="{{ url_for('static', filename='ressources/Chariot.png')}}"/>
     <p class="mb-4">
-        Ce modèle comporte un chariot se déplacant sur un rail. Il comporte deux capteurs inductifs détectant la présence du chariot en bouts de course.
+        Ce modèle comporte un chariot se déplacant sur un rail. Il comporte trois capteurs inductifs détectant la présence du chariot en bouts de course et
+        en milieu de course.
         Le chariot est déplacé par une vis à bille entraînée par un moteur asynchrone piloté par un contrôleur.</p>
     <p class="mb-4">
         Ce contrôleur dispose de deux entrées digitales de commande.
@@ -18,8 +19,8 @@
         manuel du chariot.
     </p>
     <p class="mb-4">
-        Le système est piloté par un API comportant une interface Modbus. Le tableau suivant donne les adresses physiques des différents inputs/outputs et leur position dans
-        la trame Modbus.</p>
+        Le système est piloté par un API comportant une interface ModbusTCP. Le tableau suivant donne les adresses physiques des différents inputs/outputs et leur position dans
+        la trame ModbusTCP.</p>
 
     <div class="card shadow mb-4">
         <div class="card-header py-3">
@@ -44,34 +45,40 @@
                             <td>0x00</td>
                         </tr>
                         <tr>
-                            <td>Capteur inductif position fin</td>
+                            <td>Capteur inductif position milieu</td>
                             <td>%IX0.1</td>
                             <td>Discrete Input</td>
                             <td>0x01</td>
                         </tr>
                         <tr>
-                            <td>Bascule mode automatique</td>
+                            <td>Capteur inductif position fin</td>
                             <td>%IX0.2</td>
                             <td>Discrete Input</td>
                             <td>0x02</td>
                         </tr>
                         <tr>
-                            <td>Bouton Mouvement à gauche</td>
+                            <td>Bascule mode automatique</td>
                             <td>%IX0.3</td>
                             <td>Discrete Input</td>
                             <td>0x03</td>
                         </tr>
                         <tr>
-                            <td>Bouton Mouvement à droite</td>
+                            <td>Bouton Mouvement à gauche</td>
                             <td>%IX0.4</td>
                             <td>Discrete Input</td>
                             <td>0x04</td>
                         </tr>
                         <tr>
-                            <td>Bascule marche / arrêt</td>
+                            <td>Bouton Mouvement à droite</td>
                             <td>%IX0.5</td>
                             <td>Discrete Input</td>
                             <td>0x05</td>
+                        </tr>
+                        <tr>
+                            <td>Bascule marche / arrêt</td>
+                            <td>%IX0.6</td>
+                            <td>Discrete Input</td>
+                            <td>0x06</td>
                         </tr>
                         <tr>
                             <td>Commande moteur marche</td>
