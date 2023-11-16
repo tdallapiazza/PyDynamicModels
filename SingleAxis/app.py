@@ -159,3 +159,5 @@ def setRight():
         else:
             server.args.context[0].setValues(2, 0x05, [False])
     return {'success': res}
+
+app.run()

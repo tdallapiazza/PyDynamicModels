@@ -2,10 +2,8 @@
 
 {% block content %}
     <h1 class="h3 mb-2 text-gray-800">Exercice 3: Arrêt</h1>
-    <p class="mb-4">Ajouter un programme ST prioritaire pour arrêter et reprendre le fonctionnement du mode automatique.
-        Ce programme doit être prioritaire et mettre en pause le déplacement du chariot. La façon proposée est de créer un
-        deuxième POU avec une priorité suppérieur qui annulera la sortie de la fonction automatique. Le mode manuel doit pouvoir
-        fonctionner indépendemment de la position de ce commutateur.
+    <p class="mb-4">Ajouter la possibilité d'arrêter et de reprendre le fonctionnement du mode automatique en fonction de la position du 
+        bouton bascule Marche/Arrêt.
     </p>
     <p class="mb-4">Il est demandé que le basculement sur "arrêt" ne mette pas en pause la temporisation des arrêt en bout de course. Si l'arrêt
         intervient dans une phase de pause et qu'il se prolonge au delà du temps restant de la temporisation, lorsque le bouton est basculé
