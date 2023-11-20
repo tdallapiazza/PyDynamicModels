@@ -1,7 +1,6 @@
+# deploy using : pyinstaller -c -F --add-data "templates;templates" --add-data "static;static" app.py
 
 import sys
-# setting path
-sys.path.append('../')
 
 import time
 import models.BidirectionalConstSpeedAxis as axis
