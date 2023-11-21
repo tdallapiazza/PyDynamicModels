@@ -3,9 +3,13 @@
 import sys
 
 import time
-import models.BidirectionalConstSpeedAxis as axis
+from models import BidirectionalConstSpeedAxis as axis
 from flask import Flask, render_template, Response, request, jsonify
-from modbusServer import SingleAxisModbusServer
+from connectors.modbusServer import SingleSlaveModbusServer
+from pymodbus.datastore import (
+    ModbusSequentialDataBlock,
+    ModbusSlaveContext,
+)
 
 app = Flask(__name__)
 global axis1, isRunning, isConnected
@@ -25,11 +29,16 @@ def loadPage(id):
 @app.route('/connect', methods=['POST'])
 def connect():
     global server, isConnected
+    di = ModbusSequentialDataBlock(0x01, [0] * 7)
+    co = ModbusSequentialDataBlock(0x01, [0] * 2)
+    slaveContext = ModbusSlaveContext(
+        di=di, co=co
+    )
     sp=request.form['address'].split(':')
     if len(sp)==1:
-        server = SingleAxisModbusServer(host=sp[0])
+        server = SingleSlaveModbusServer(slaveContext, host=sp[0])
     else:
-        server = SingleAxisModbusServer(host=sp[0], port=sp[1])
+        server = SingleSlaveModbusServer(slaveContext, host=sp[0], port=sp[1])
     print('Starting the server')
     server.start_server()
     print('Server started') 

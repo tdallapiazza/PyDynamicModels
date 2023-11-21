@@ -6,11 +6,7 @@ from threading import Thread
 
 
 from pymodbus import __version__ as pymodbus_version
-from pymodbus.datastore import (
-    ModbusSequentialDataBlock,
-    ModbusServerContext,
-    ModbusSlaveContext,
-)
+from pymodbus.datastore import ModbusServerContext
 from pymodbus.device import ModbusDeviceIdentification
 from pymodbus.server import StartTcpServer, ServerStop
 
@@ -25,27 +21,19 @@ class ServerArgs:
     port=None
     host=None
     
-class SingleAxisModbusServer():
-    def __init__(self, host="localhost", port=5020):
+class SingleSlaveModbusServer():
+    def __init__(self, slaveContext, host="localhost", port=5020):
+
+        
         # Steup the server
-        self.args = self.setup_server(host, port)
+        self.args = self.setup_server(slaveContext, host, port)
         
 
-    def start_background_loop(self):
-        asyncio.set_event_loop(self.loop)
-        self.loop.run_until_complete(self.server)
 
-    def setup_server(self, host, port):
-
-        di = ModbusSequentialDataBlock(0x01, [0] * 7)
-        co = ModbusSequentialDataBlock(0x01, [0] * 2)
-        context = ModbusSlaveContext(
-            di=di, co=co
-        )
-        single = True
+    def setup_server(self, slaveContext, host, port):
 
         # Build data storage
-        context = ModbusServerContext(slaves=context, single=single)
+        context = ModbusServerContext(slaves=slaveContext, single=True)
 
         # ----------------------------------------------------------------------- #
         # initialize the server information
@@ -78,7 +66,6 @@ class SingleAxisModbusServer():
         )
 
     def start_server(self):
-        
         t = Thread(target=self.run_server, daemon=True)
         t.start()
         return True
