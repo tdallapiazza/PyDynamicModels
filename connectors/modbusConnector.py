@@ -1,4 +1,4 @@
-from connectorInterface import ConnectorInterface
+from connectors.connectorInterface import ConnectorInterface
 from pymodbus.datastore import ModbusServerContext
 from pymodbus.device import ModbusDeviceIdentification
 from pymodbus import __version__ as pymodbus_version

@@ -5,7 +5,7 @@ import sys
 import time
 from models import BidirectionalConstSpeedAxis as axis
 from flask import Flask, render_template, Response, request, jsonify
-from connectors.modbusServer import SingleSlaveModbusServer
+from connectors.modbusConnector import ModbusConnector
 from pymodbus.datastore import (
     ModbusSequentialDataBlock,
     ModbusSlaveContext,
@@ -36,11 +36,11 @@ def connect():
     )
     sp=request.form['address'].split(':')
     if len(sp)==1:
-        server = SingleSlaveModbusServer(slaveContext, host=sp[0])
+        server = ModbusConnector(slaveContext, host=sp[0])
     else:
-        server = SingleSlaveModbusServer(slaveContext, host=sp[0], port=sp[1])
+        server = ModbusConnector(slaveContext, host=sp[0], port=sp[1])
     print('Starting the server')
-    server.start_server()
+    server.start()
     print('Server started') 
     isConnected = True
     return {'success': True}
@@ -52,7 +52,7 @@ def disconnect():
         stopSim()
         resetSim()
     if 'server' in globals():
-        server.stop_server()
+        server.stop()
     print("server stopped")
     isConnected = False
     return {'success': True}
