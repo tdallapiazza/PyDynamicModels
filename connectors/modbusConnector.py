@@ -1,35 +1,23 @@
-#!/usr/bin/env python3
-
-import logging
-from threading import Thread
-
-
-from pymodbus import __version__ as pymodbus_version
+from connectorInterface import ConnectorInterface
 from pymodbus.datastore import ModbusServerContext
 from pymodbus.device import ModbusDeviceIdentification
+from pymodbus import __version__ as pymodbus_version
 from pymodbus.server import StartTcpServer, ServerStop
-
-
-_logger = logging.getLogger(__file__)
-_logger.setLevel(logging.INFO)
-
 
 class ServerArgs:
     context=None
     identity=None
     port=None
     host=None
-    
-class SingleSlaveModbusServer():
-    def __init__(self, slaveContext, host="localhost", port=5020):
-
-        
-        # Steup the server
-        self.args = self.setup_server(slaveContext, host, port)
-        
 
 
-    def setup_server(self, slaveContext, host, port):
+class ModbusConnector(ConnectorInterface):
+    def __init__(self, slaveContext, *args, host="localhost", port=5020, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.args = self.setup(slaveContext, host, port)
+        self.target = self.run
+        self.daemon=True
+    def setup(self, slaveContext, host, port):
 
         # Build data storage
         context = ModbusServerContext(slaves=slaveContext, single=True)
@@ -55,8 +43,9 @@ class SingleSlaveModbusServer():
         args.port=port
         args.host=host
         return args
-
-    def run_server(self):
+    
+    def run(self):
+        self.running = True
         address = (self.args.host, self.args.port)
         StartTcpServer(
             context=self.args.context,  # Data storage
@@ -64,11 +53,5 @@ class SingleSlaveModbusServer():
             address=address,  # listen address
         )
 
-    def start_server(self):
-        t = Thread(target=self.run_server, daemon=True)
-        t.start()
-        return True
-    
-    def stop_server(self):
+    def stop(self):
         ServerStop()
-        return True
