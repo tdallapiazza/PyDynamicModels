@@ -3,7 +3,7 @@
 import sys
 
 import time
-from models import BidirectionalConstSpeedAxis as axis
+from models import simpleAxisModel as axis
 from flask import Flask, render_template, Response, request, jsonify
 from connectors.modbusConnector import ModbusConnector
 from pymodbus.datastore import (
@@ -15,8 +15,8 @@ app = Flask(__name__)
 global axis1, isRunning, isConnected
 isRunning = False
 isConnected = False
-axis1 = axis.BidirectionalConstSpeedAxis(0.005, 0.6, [0.0, 0.9, 1.8])
-axis1.start()
+axis1 = axis.SimpleAxisModel(0.005, 0.3, [0.0, 0.9, 1.8])
+#axis1.start()
 
 @app.route('/')
 def index():
@@ -59,21 +59,21 @@ def disconnect():
 
 @app.route('/startSim', methods=['POST'])
 def startSim():
-    axis1.start()
+    axis1.startSim()
     global isRunning
     isRunning=True
     return {'success': True}
 
 @app.route('/stopSim', methods=['POST'])
 def stopSim():
-    axis1.stop()
+    axis1.stopSim()
     global isRunning
     isRunning=False
     return {'success': True}
 
 @app.route('/resetSim', methods=['POST'])
 def resetSim():
-    axis1.reset()
+    axis1.resetSim()
     return {'success': True}
 
 @app.route('/checkConnect')
