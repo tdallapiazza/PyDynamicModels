@@ -1,18 +1,13 @@
 # deploy using : pyinstaller -c -F --add-data "templates;templates" --add-data "static;static" app.py
 
-import sys
-
 import time
 from modules import simpleAxisModule
 from flask import Flask, render_template, Response, request, jsonify
-from connectors.modbusConnector import ModbusConnector
-from pymodbus.datastore import (
-    ModbusSequentialDataBlock,
-    ModbusSlaveContext,
-)
 
 app = Flask(__name__)
 global module, isRunning, isConnected
+isRunning=False
+isConnected=False
 module = simpleAxisModule.SimpleAxisModule()
 
 @app.route('/')
@@ -100,52 +95,14 @@ def read_state():
         yield f"data: {ret}\n\n"
     yield "data: finished\n\n"
         
-@app.route('/ctrlAuto', methods=['POST'])
+@app.route('/ctrl', methods=['POST'])
 def setMode():
     global module
     res=False
     if 'module' in globals():
         res=True
-        if request.form['data']=='true':
-            module.connector.args.context[0].setValues(2, 0x03, [True])
-        else:
-            module.connector.args.context[0].setValues(2, 0x03, [False])
-    return {'success': res}
-
-@app.route('/ctrlRun', methods=['POST'])
-def setRun():
-    global module
-    res=False
-    if 'module' in globals():
-        res=True
-        if request.form['data']=='true':
-            module.connector.args.context[0].setValues(2, 0x06, [True])
-        else:
-            module.connector.args.context[0].setValues(2, 0x06, [False])
-    return {'success': res}
-
-@app.route('/ctrlLeft', methods=['POST'])
-def setLeft():
-    global module
-    res=False
-    if 'module' in globals():
-        res=True
-        if request.form['data']=='true':
-            module.connector.args.context[0].setValues(2, 0x04, [True])
-        else:
-            module.connector.args.context[0].setValues(2, 0x04, [False])
-    return {'success': res}
-
-@app.route('/ctrlRight', methods=['POST'])
-def setRight():
-    global module
-    res=False
-    if 'module' in globals():
-        res=True
-        if request.form['data']=='true':
-            module.connector.args.context[0].setValues(2, 0x05, [True])
-        else:
-            module.connector.args.context[0].setValues(2, 0x05, [False])
+        cmd = request.form['data']
+        eval(cmd)
     return {'success': res}
 
 app.run()

@@ -62,14 +62,14 @@
          $("#ctrlMan").removeClass('btn-secondary');
          $("#ctrlAuto").removeClass('btn-primary');
          $("#ctrlAuto").addClass('btn-secondary');
-         $.post("/ctrlAuto",{data: 'false'});
+         $.post("/ctrl",{data: 'module.connector.args.context[0].setValues(2, 0x03, [False])'});
       });
       $("#ctrlAuto").click(function(){
          $("#ctrlAuto").addClass('btn-primary');
          $("#ctrlAuto").removeClass('btn-secondary');
          $("#ctrlMan").removeClass('btn-primary');
          $("#ctrlMan").addClass('btn-secondary');
-         $.post("/ctrlAuto",{data: 'true'});
+         $.post("/ctrl",{data: 'module.connector.args.context[0].setValues(2, 0x03, [True])'});
       });
 
       $("#ctrlStart").click(function(){
@@ -77,28 +77,28 @@
          $("#ctrlStart").removeClass('btn-secondary');
          $("#ctrlStop").removeClass('btn-primary');
          $("#ctrlStop").addClass('btn-secondary');
-         $.post("/ctrlRun",{data: 'true'});
+         $.post("/ctrl",{data: 'module.connector.args.context[0].setValues(2, 0x06, [True])'});
       });
       $("#ctrlStop").click(function(){
          $("#ctrlStop").addClass('btn-primary');
          $("#ctrlStop").removeClass('btn-secondary');
          $("#ctrlStart").removeClass('btn-primary');
          $("#ctrlStart").addClass('btn-secondary');
-         $.post("/ctrlRun",{data: 'false'});
+         $.post("/ctrl",{data: 'module.connector.args.context[0].setValues(2, 0x06, [False])'});
       });
 
       $("#ctrlLeft").on("mousedown", function(){
-         $.post("/ctrlLeft",{data: 'true'});
+         $.post("/ctrl",{data: 'module.connector.args.context[0].setValues(2, 0x04, [True])'});
       });
       $("#ctrlLeft").on("mouseup mouseleave", function(){
-         $.post("/ctrlLeft",{data: 'false'});
+         $.post("/ctrl",{data: 'module.connector.args.context[0].setValues(2, 0x04, [False])'});
       });
 
       $("#ctrlRight").on("mousedown", function(){
-         $.post("/ctrlRight",{data: 'true'});
+         $.post("/ctrl",{data: 'module.connector.args.context[0].setValues(2, 0x05, [True])'});
       });
       $("#ctrlRight").on("mouseup mouseleave", function(){
-         $.post("/ctrlRight",{data: 'false'});
+         $.post("/ctrl",{data: 'module.connector.args.context[0].setValues(2, 0x05, [False])'});
       });
 
       
