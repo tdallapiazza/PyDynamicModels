@@ -3,7 +3,7 @@
 import sys
 
 import time
-from models import simpleAxisModel as axis
+from modules import simpleAxisModule
 from flask import Flask, render_template, Response, request, jsonify
 from connectors.modbusConnector import ModbusConnector
 from pymodbus.datastore import (
@@ -12,11 +12,8 @@ from pymodbus.datastore import (
 )
 
 app = Flask(__name__)
-global axis1, isRunning, isConnected
-isRunning = False
-isConnected = False
-axis1 = axis.SimpleAxisModel(0.005, 0.3, [0.0, 0.9, 1.8])
-#axis1.start()
+global module, isRunning, isConnected
+module = simpleAxisModule.SimpleAxisModule()
 
 @app.route('/')
 def index():
@@ -28,52 +25,48 @@ def loadPage(id):
 
 @app.route('/connect', methods=['POST'])
 def connect():
-    global server, isConnected
-    di = ModbusSequentialDataBlock(0x01, [0] * 7)
-    co = ModbusSequentialDataBlock(0x01, [0] * 2)
-    slaveContext = ModbusSlaveContext(
-        di=di, co=co
-    )
+    global module, isConnected
     sp=request.form['address'].split(':')
     if len(sp)==1:
-        server = ModbusConnector(slaveContext, host=sp[0])
+        module.connector.args.host = sp[0]
     else:
-        server = ModbusConnector(slaveContext, host=sp[0], port=sp[1])
+        module.connector.args.host= sp[0]
+        module.connector.args.port=sp[1]
     print('Starting the server')
-    server.start()
+    module.connector.start()
     print('Server started') 
     isConnected = True
     return {'success': True}
 
 @app.route('/disconnect', methods=['POST'])
 def disconnect():
-    global server, isConnected, isRunning
+    global module, isConnected, isRunning
     if isRunning:
-        stopSim()
-        resetSim()
-    if 'server' in globals():
-        server.stop()
+        module.model.stopSim()
+        module.model.resetSim()
+    if 'module' in globals():
+        module.connector.stop()
     print("server stopped")
     isConnected = False
     return {'success': True}
 
 @app.route('/startSim', methods=['POST'])
 def startSim():
-    axis1.startSim()
+    module.model.startSim()
     global isRunning
     isRunning=True
     return {'success': True}
 
 @app.route('/stopSim', methods=['POST'])
 def stopSim():
-    axis1.stopSim()
+    module.model.stopSim()
     global isRunning
     isRunning=False
     return {'success': True}
 
 @app.route('/resetSim', methods=['POST'])
 def resetSim():
-    axis1.resetSim()
+    module.model.resetSim()
     return {'success': True}
 
 @app.route('/checkConnect')
@@ -100,72 +93,59 @@ def run():
 
 # a generator with yield expression
 def read_state():
+    global isRunning, isConnected, module
     while isRunning and isConnected:
-        global server
         time.sleep(0.01)
-        # as we are in simulation, there is no physical inputs so we'll use coils to set interal and read internal values
-        # first read model sensors and set the corresponding coils
-        ret='0.0'
-        server.args.context[0].setValues(2, 0x00, axis1.digitalOut)
-
-        # then apply the commands if any
-        values = server.args.context[0].getValues(1, 0x00, 2)
-
-        axis1.run = True if values[0] else False
-        axis1.reverse = True if values[1] else False
-        pos = "%.3f"%axis1.pos
-        # formating the response
-        ret ='{} {} {} {} {} {}'.format(pos, axis1.digitalOut[0], axis1.digitalOut[1],axis1.digitalOut[2], axis1.run, axis1.reverse)
-        # print(pos, end="   \r", flush=True)
+        ret = module.update()
         yield f"data: {ret}\n\n"
     yield "data: finished\n\n"
         
 @app.route('/ctrlAuto', methods=['POST'])
 def setMode():
-    global server
+    global module
     res=False
-    if 'server' in globals():
+    if 'module' in globals():
         res=True
         if request.form['data']=='true':
-            server.args.context[0].setValues(2, 0x03, [True])
+            module.connector.args.context[0].setValues(2, 0x03, [True])
         else:
-            server.args.context[0].setValues(2, 0x03, [False])
+            module.connector.args.context[0].setValues(2, 0x03, [False])
     return {'success': res}
 
 @app.route('/ctrlRun', methods=['POST'])
 def setRun():
-    global server
+    global module
     res=False
-    if 'server' in globals():
+    if 'module' in globals():
         res=True
         if request.form['data']=='true':
-            server.args.context[0].setValues(2, 0x06, [True])
+            module.connector.args.context[0].setValues(2, 0x06, [True])
         else:
-            server.args.context[0].setValues(2, 0x06, [False])
+            module.connector.args.context[0].setValues(2, 0x06, [False])
     return {'success': res}
 
 @app.route('/ctrlLeft', methods=['POST'])
 def setLeft():
-    global server
+    global module
     res=False
-    if 'server' in globals():
+    if 'module' in globals():
         res=True
         if request.form['data']=='true':
-            server.args.context[0].setValues(2, 0x04, [True])
+            module.connector.args.context[0].setValues(2, 0x04, [True])
         else:
-            server.args.context[0].setValues(2, 0x04, [False])
+            module.connector.args.context[0].setValues(2, 0x04, [False])
     return {'success': res}
 
 @app.route('/ctrlRight', methods=['POST'])
 def setRight():
-    global server
+    global module
     res=False
-    if 'server' in globals():
+    if 'module' in globals():
         res=True
         if request.form['data']=='true':
-            server.args.context[0].setValues(2, 0x05, [True])
+            module.connector.args.context[0].setValues(2, 0x05, [True])
         else:
-            server.args.context[0].setValues(2, 0x05, [False])
+            module.connector.args.context[0].setValues(2, 0x05, [False])
     return {'success': res}
 
 app.run()

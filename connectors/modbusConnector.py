@@ -12,7 +12,7 @@ class ServerArgs:
 
 
 class ModbusConnector(ConnectorInterface):
-    def __init__(self, slaveContext, *args, host="localhost", port=5020, **kwargs):
+    def __init__(self, slaveContext, *args, host="127.0.0.2", port=5020, **kwargs):
         super().__init__(*args, **kwargs)
         self.args = self.setup(slaveContext, host, port)
         self.target = self.run
