@@ -2,36 +2,38 @@
 
 import time
 from modules import simpleAxisModule
-from flask import Flask, render_template, Response, request, jsonify
+from flask import Flask, render_template, Response, request
 
 app = Flask(__name__)
 global module, isRunning, isConnected
 isRunning=False
 isConnected=False
-module = simpleAxisModule.SimpleAxisModule()
+#module = simpleAxisModule.SimpleAxisModule()
 
 @app.route('/')
 def index():
-    return render_template('base.html')
+    return render_template('index.html')
 
-@app.route('/<id>')
-def loadPage(id):
-    return render_template(id+'.html')
+@app.route('/<mod>/<page>')
+def loadPage(mod, page):
+    return render_template(mod + "/" + page)
 
 @app.route('/connect', methods=['POST'])
 def connect():
     global module, isConnected
-    sp=request.form['address'].split(':')
-    if len(sp)==1:
-        module.connector.args.host = sp[0]
-    else:
-        module.connector.args.host= sp[0]
-        module.connector.args.port=sp[1]
-    print('Starting the server')
-    module.connector.start()
-    print('Server started') 
-    isConnected = True
-    return {'success': True}
+    if 'module' in globals():
+        sp=request.form['address'].split(':')
+        if len(sp)==1:
+            module.connector.args.host = sp[0]
+        else:
+            module.connector.args.host= sp[0]
+            module.connector.args.port=sp[1]
+        print('Starting the server')
+        module.connector.start()
+        print('Server started') 
+        isConnected = True
+        return {'success': True}
+    return {'success': False}
 
 @app.route('/disconnect', methods=['POST'])
 def disconnect():
@@ -41,27 +43,34 @@ def disconnect():
         module.model.resetSim()
     if 'module' in globals():
         module.connector.stop()
+        module.__init__()
     print("server stopped")
     isConnected = False
     return {'success': True}
 
 @app.route('/startSim', methods=['POST'])
 def startSim():
-    module.model.startSim()
-    global isRunning
-    isRunning=True
-    return {'success': True}
+    if 'module' in globals():
+        module.model.startSim()
+        global isRunning
+        isRunning=True
+        return {'success': True}
+    return {'success': False}
 
 @app.route('/stopSim', methods=['POST'])
 def stopSim():
-    module.model.stopSim()
-    global isRunning
-    isRunning=False
-    return {'success': True}
+    if 'module' in globals():
+        module.model.stopSim()
+        global isRunning
+        isRunning=False
+        return {'success': True}
+    return {'success': False}
 
 @app.route('/resetSim', methods=['POST'])
 def resetSim():
-    module.model.resetSim()
+    if 'module' in globals():
+        module.model.resetSim()
+        return {'success': True}
     return {'success': True}
 
 @app.route('/checkConnect')
@@ -104,5 +113,14 @@ def setMode():
         cmd = request.form['data']
         eval(cmd)
     return {'success': res}
+
+@app.route('/loadModule', methods=['POST'])
+def loadModule():
+    global module
+    match request.form['data']:
+        case "simpleAxisModule":
+            print("loading module")
+            module = simpleAxisModule.SimpleAxisModule()
+    return {'success': True}
 
 app.run()

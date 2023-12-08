@@ -31,61 +31,9 @@
         <!-- Sidebar -->
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
-            <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/">
-                <div class="sidebar-brand-icon rotate-n-15">
-                    <i class="fas fa-laugh-wink"></i>
-                </div>
-                <div class="sidebar-brand-text mx-3">Automation</div>
-            </a>
-            <!--
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/">
-                <div class="sidebar-brand-icon">
-                    <img src="{{ url_for('static', filename='ressources/logo.svg')}}" width="65%" height="65%"> </img>
-               </div>
-            </a>-->
-
-            <!-- Divider -->
-            <hr class="sidebar-divider my-0">
-
-            <!-- Nav Item - Dashboard -->
-            <li class="nav-item">
-                <a class="nav-link" href="/dashboard" id="ldashboard">
-                    <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span>Tableau de bord</span></a>
-                <a class="nav-link" href="/setup" id="lsetup">
-                  <i class="fas fa-fw fa-cog"></i>
-                  <span>Configuration</span></a>
-            </li>
-
-            <!-- Divider -->
-            <hr class="sidebar-divider">
-
-            <!-- Exercises -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
-                    aria-expanded="true" aria-controls="collapseTwo">
-                    <i class="fas fa-fw fa-edit"></i>
-                    <span>Exercices</span>
-                </a>
-                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Exercices basiques:</h6>
-                        <a class="collapse-item" href="/exercice1" id="lex1">Exercice 1</a>
-                        <a class="collapse-item" href="/exercice2" id="lex2">Exercice 2</a>
-                        <a class="collapse-item" href="/exercice3" id="lex3">Exercice 3</a>
-                        <a class="collapse-item" href="/exercice4" id="lex4">Exercice 4</a>
-                    </div>
-                </div>
-            </li>
-
-            <!-- Divider -->
-            <hr class="sidebar-divider d-none d-md-block">
-
-            <!-- Sidebar Toggler (Sidebar) -->
-            <div class="text-center d-none d-md-inline">
-                <button class="rounded-circle border-0" id="sidebarToggle"></button>
-            </div>
+            {% block sidebar %} 
+                    
+            {% endblock %}
 
         </ul>
         <!-- End of Sidebar -->
@@ -102,53 +50,6 @@
                     </button>
 
                     <!-- Topbar Search -->
-                    <form
-                        class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
-                        <div class="input-group">
-                            <input type="text" class="form-control bg-light border-0 small" id="address" placeholder="Modbus IP address..."
-                                aria-label="Connect" aria-describedby="basic-addon2">
-                            <div class="input-group-append">
-                                <button class="btn btn-primary" id="connect" type="button">
-                                    <i class="fas fa-lock-open"></i>
-                                </button>
-                                
-                            </div>
-                            
-                            
-                        </div>
-                        
-                    </form>
-                    <div class="ml-2 align-items-center" >
-                        <span class="ml-2 text-gray-600 small" id="connecting" style="display:none">Connecting...</span>
-                    </div>
-
-                    <!-- Topbar Navbar -->
-                    <ul class="navbar-nav ml-auto">
-
-                        <!-- Nav Item - Search Dropdown (Visible Only XS) -->
-                        <li class="nav-item dropdown no-arrow d-sm-none">
-                            <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-search fa-fw"></i>
-                            </a>
-                            <!-- Dropdown - Messages -->
-                            <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
-                                aria-labelledby="searchDropdown">
-                                <form class="form-inline mr-auto w-100 navbar-search">
-                                    <div class="input-group">
-                                        <input type="text" class="form-control bg-light border-0 small"
-                                            placeholder="Search for..." aria-label="Search"
-                                            aria-describedby="basic-addon2">
-                                        <div class="input-group-append">
-                                            <button class="btn btn-primary" type="button">
-                                                <i class="fas fa-search fa-sm"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </li>
-                    </ul>
 
                 </nav>
                 <!-- End of Topbar -->
@@ -156,7 +57,9 @@
                 <!-- Begin Page Content -->
                 <div class="container-fluid" id="content">
 
-                    {% block content %} {% endblock %}
+                    {% block content %} 
+                    
+                    {% endblock %}
 
                 </div>
                 <!-- /.container-fluid -->
@@ -204,97 +107,10 @@
                     }
                 });
         });
-
-        $('#connect').click(function connect() {
-            if(!connected){
-                $('#connecting').text('Connecting...');
-                $('#connecting').show();
-                $.post('/connect',
-                    {
-                        address: $('#address').val()
-                    },
-                    function(data) {
-                        $('#connecting').hide();
-                        if(data['success']){
-                            connected=true;
-                            //create the event for connection checker
-                            var source = new EventSource("/checkConnect");
-                            source.onmessage = function (event) {
-                                var btn = document.getElementById('connect');
-                                if(event.data==="finished"){
-                                    source.close();
-                                    btn.children[0].className= "fas fa-lock-open";
-                                    return;
-                                }
-                                if(event.data==="True"){
-                                    btn.children[0].className= "fas fa-lock";
-                                }else{
-                                    btn.children[0].className= "fas fa-lock-open";
-                                }
-                            }
-                        }
-                    }
-                );
-            }else{
-                $('#connecting').text('Disconnecting...');
-                $('#connecting').show();
-                $.post('/disconnect',
-                    function(data) {
-                        $('#connecting').hide();
-                        if(data['success']){
-                            connected=false;
-                        }
-                    }
-                );
-            }
-        });
-
-
-        $("#ldashboard").on("click",function(e){
-            e.preventDefault();
-            $.get("/dashboard", function( data ) {
-                $("#content").html(data);
-            });
-        });
-
-        $("#lsetup").on("click",function(e){
-            e.preventDefault();
-            $.get("/setup", function( data ) {
-                $("#content").html(data);
-            });
-        });
-
-        $("#lex1").on("click",function(e){
-            e.preventDefault();
-            $.get("/exercice1", function( data ) {
-                $("#content").html(data);
-            });
-        });
-
-        $("#lex2").on("click",function(e){
-            e.preventDefault();
-            $.get("/exercice2", function( data ) {
-                $("#content").html(data);
-            });
-        });
-        
-        $("#lex3").on("click",function(e){
-            e.preventDefault();
-            $.get("/exercice3", function( data ) {
-                $("#content").html(data);
-            });
-        });
-
-        $("#lex4").on("click",function(e){
-            e.preventDefault();
-            $.get("/exercice4", function( data ) {
-                $("#content").html(data);
-            });
-        });
     </script>
-
-
-    {% block script %} {% endblock %}
+    {% block script %} 
+    
+    {% endblock %}
 
 </body>
 
