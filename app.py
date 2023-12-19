@@ -1,7 +1,7 @@
 # deploy using : pyinstaller -c -F --add-data "templates;templates" --add-data "static;static" app.py
 
 import time
-from modules import simpleAxisModule
+from modules import simpleAxisModule, motorDCAxisModule
 from flask import Flask, render_template, Response, request
 
 app = Flask(__name__)
@@ -121,6 +121,9 @@ def loadModule():
         case "simpleAxisModule":
             print("loading module")
             module = simpleAxisModule.SimpleAxisModule()
+        case "motorDCAxisModule":
+            print("loading module")
+            module = motorDCAxisModule.MotorDCAxisModule()
     return {'success': True}
 
 app.run()

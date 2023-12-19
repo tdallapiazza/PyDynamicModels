@@ -30,6 +30,7 @@ class MotorDCAxisModel(ModelInterface):
         self.temp=20
         self.simTime=0
         self.event=Event()
+        self.stall = False
 
     def integrate(self):
         print("Starting thread\n")

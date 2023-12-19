@@ -1,0 +1,442 @@
+{% extends "base.html" %}
+
+
+{% block sidebar %}
+<!-- Sidebar - Brand -->
+<a class="sidebar-brand d-flex align-items-center justify-content-center" href="/">
+   <div class="sidebar-brand-icon rotate-n-15">
+       <i class="fas fa-laugh-wink"></i>
+   </div>
+   <div class="sidebar-brand-text mx-3">Automation</div>
+</a>
+<!--
+<a class="sidebar-brand d-flex align-items-center justify-content-center" href="/">
+   <div class="sidebar-brand-icon">
+       <img src="{{ url_for('static', filename='ressources/logo.svg')}}" width="65%" height="65%"> </img>
+  </div>
+</a>-->
+
+<!-- Divider -->
+<hr class="sidebar-divider my-0">
+
+<!-- Nav Item - Dashboard -->
+<li class="nav-item">
+   <a class="nav-link" href="/dashboard" id="ldashboard">
+       <i class="fas fa-fw fa-tachometer-alt"></i>
+       <span>Tableau de bord</span></a>
+   <a class="nav-link" href="/setup" id="lsetup">
+     <i class="fas fa-fw fa-cog"></i>
+     <span>Configuration</span></a>
+</li>
+
+<!-- Divider -->
+<hr class="sidebar-divider">
+
+<!-- Exercises -->
+<li class="nav-item">
+   <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
+       aria-expanded="true" aria-controls="collapseTwo">
+       <i class="fas fa-fw fa-edit"></i>
+       <span>Exercices</span>
+   </a>
+   <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+       <div class="bg-white py-2 collapse-inner rounded">
+           <h6 class="collapse-header">Exercices basiques:</h6>
+       </div>
+   </div>
+</li>
+
+<!-- Divider -->
+<hr class="sidebar-divider d-none d-md-block">
+
+<!-- Sidebar Toggler (Sidebar) -->
+<div class="text-center d-none d-md-inline">
+   <button class="rounded-circle border-0" id="sidebarToggle"></button>
+</div>
+{% endblock %}
+
+
+
+
+{% block content %}
+
+
+<!-- Page Heading -->
+<h1 class="h3 mb-2 text-gray-800">{% block title %}Tableau de bord{% endblock %}</h1>
+<div class="row">
+   <div class="col-lg-6, col-md-12">
+      <form
+         class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+         <div class="input-group">
+               <input type="text" class="form-control bg-light border-0 small" id="address" placeholder="Modbus IP address..."
+                  aria-label="Connect" aria-describedby="basic-addon2">
+               <div class="input-group-append">
+                  <button class="btn btn-primary" id="connect" type="button">
+                     <i class="fas fa-lock-open"></i>
+                  </button>
+                  
+               </div>    
+         </div>
+         
+      </form>
+      <div class="ml-2 align-items-center" >
+         <span class="ml-2 text-gray-600 small" id="connecting" style="display:none">Connecting...</span>
+      </div>
+   </div>
+</div>
+<div class="row">
+   <div class="col-lg-6, col-md-12">
+      <div class="btn-group" role="group">
+         <button type="button" class="btn btn-secondary btn-sm mb-2" id="startSim" >Start simulation</button>
+         <button type="button" class="btn btn-secondary btn-sm mb-2" id="resetSim" >Reset simulation</button>
+         <button type="button" class="btn btn-secondary btn-sm mb-2" id="stopSim" >Stop simulation</button>
+      </div>
+   </div>
+</div>
+<!-- Content Row -->
+<div class="row">
+   <div class="col-md-12 mb-4">
+      <div class="card border-left-primary shadow h-100 py-2">
+         <div class="card-body">
+            <div class="row no-gutters align-items-center">
+                  <div class="col mr-2">
+                     <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                        Représentation graphique</div>
+                        <div class="col-auto">
+                           <svg
+                              width="100%"
+                              height="100%"
+                              viewBox="0 0 2000 150"
+                              version="1.1"
+                              id="svg5"
+                              xml:space="preserve"
+                              xmlns:xlink="http://www.w3.org/1999/xlink"
+                              xmlns="http://www.w3.org/2000/svg"
+                              xmlns:svg="http://www.w3.org/2000/svg"><defs
+                              id="defs2"><linearGradient
+                                 id="linearGradient12114"><stop
+                                    style="stop-color:#d5d5d5;stop-opacity:0.90615827;"
+                                    offset="0"
+                                    id="stop12110" /><stop
+                                    style="stop-color:#bfbfbf;stop-opacity:1;"
+                                    offset="0.5"
+                                    id="stop12205" /><stop
+                                    style="stop-color:#d5d5d5;stop-opacity:0.92082113;"
+                                    offset="1"
+                                    id="stop12112" /></linearGradient><linearGradient
+                                 xlink:href="#linearGradient12114"
+                                 id="linearGradient12116"
+                                 x1="1990.2913"
+                                 y1="51.779938"
+                                 x2="8.0906153"
+                                 y2="48.54369"
+                                 gradientUnits="userSpaceOnUse" /></defs>
+                              <g id="layer1">
+                                 <rect
+                                 style="fill:url(#linearGradient12116);stroke:#000000;stroke-width:3;stroke-miterlimit:0;stroke-dasharray:none;stroke-opacity:1;fill-opacity:1"
+                                 id="rect294"
+                                 width="1997"
+                                 height="47"
+                                 x="1.5"
+                                 y="31.5" /><circle
+                                 style="fill:#345bcc;fill-opacity:1;stroke:#000000;stroke-width:3;stroke-miterlimit:0;stroke-dasharray:none;stroke-opacity:1"
+                                 id="path1818"
+                                 cx="98.5"
+                                 cy="126.5"
+                                 r="20" /><circle
+                                 style="fill:#345bcc;fill-opacity:1;stroke:#000000;stroke-width:3;stroke-miterlimit:0;stroke-dasharray:none;stroke-opacity:1"
+                                 id="path1818-7"
+                                 cx="1898.5"
+                                 cy="126.5"
+                                 r="20" /><circle
+                                 style="fill:#345bcc;fill-opacity:1;stroke:#000000;stroke-width:3;stroke-miterlimit:0;stroke-dasharray:none;stroke-opacity:1"
+                                 id="path1818-7"
+                                 cx="998.5"
+                                 cy="126.5"
+                                 r="20" />
+                                 <g id="chariot" transform="translate(0.0 0.0)">
+                                    <path
+                                    style="fill:#a4a4a4;stroke:#000000;stroke-width:3;stroke-miterlimit:0"
+                                    d="m 48.5,21.5 h 100 v 70 h -25 L 98.5,103.23139 73.5,91.5 h -25 z" />
+                                 </g>
+                              </g>
+                           </svg>
+                        </div>
+                  </div>   
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+
+<div class="row">
+   <!-- Position as a card-->
+   <div class="col-xl-3 col-md-6 mb-4">
+         <div class="card border-left-primary shadow h-100 py-2">
+            <div class="card-body">
+               <div class="row no-gutters">
+                     <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                           Position [m]</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800" id="position">0.0</div>
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                           Courant [A]</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800" id="courant">0.0</div>
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                           Température [°C]</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800" id="temp">0.0</div>
+                     </div>
+                     <div class="col-auto">
+                        <i class="fas fa-location-arrow fa-2x text-gray-300"></i>
+                     </div>
+               </div>
+            </div>
+         </div>
+   </div>
+   <div class="col-xl-3 col-md-6 mb-4">
+         <div class="card border-left-primary shadow h-100 py-2">
+            <div class="card-body">
+               <div class="row no-gutters">
+                     <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                           Capteurs</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">Moteur bloqué:</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800"><i class="fas fa-toggle-off fa-2x text-gray-800" id="capteur1"></i></div>
+                     </div>
+                     <div class="col-auto">
+                        <i class="fas fa-step-forward fa-2x text-gray-300"></i>
+                     </div>
+               </div>
+            </div>
+         </div>
+   </div>
+   <div class="col-xl-3 col-md-6 mb-4">
+         <div class="card border-left-primary shadow h-100 py-2">
+            <div class="card-body">
+               <div class="row no-gutters">
+                     <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                           Commande moteur</div>
+                           <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                              Tension alim. [V]</div>
+                           <div class="h5 mb-0 font-weight-bold text-gray-800" id="voltage">0.0</div>
+                     </div>
+                     <div class="col-auto">
+                        <i class="fas fa-tachometer-alt fa-2x text-gray-300"></i>
+                     </div>
+               </div>
+            </div>
+      
+         </div>
+   </div>
+   <div class="col-xl-3 col-md-6 mb-4">
+      <div class="card border-left-primary shadow h-100 py-2">
+         <div class="card-body">
+            <div class="row no-gutters">
+                  <div class="col mr-2">
+                     <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                        Commandes opérateur</div>
+                     <div class="h5 mb-0 font-weight-bold text-gray-800">Mode:</div>
+                     <div class="h5 mb-0 font-weight-bold text-gray-800">
+                        <div class="btn-group" role="group">
+                           <button type="button" class="btn btn-primary  mb-2" data-bs-toggle="button" autocomplete="off" id="ctrlMan">Manuel</button>
+                           <button type="button" class="btn btn-primary  mb-2" data-bs-toggle="button" autocomplete="off" id="ctrlAuto">Auto</button>
+                        </div>
+                     </div>
+                     <div class="h5 mb-0 font-weight-bold text-gray-800">Contrôle manuel:</div>
+                     <div class="h5 mb-0 font-weight-bold text-gray-800">
+                        <div class="btn-group" role="group">
+                           <button type="button" class="btn btn-primary mb-2" id="ctrlLeft" ><i class="fas fa-angle-left fa-2x"></i></button>
+                           <button type="button" class="btn btn-primary mb-2" id="ctrlRight" ><i class="fas fa-angle-right fa-2x"></i></button>
+                        </div>
+                     </div>
+                     <div class="h5 mb-0 font-weight-bold text-gray-800">Contrôle auto.:</div>
+                     <div class="h5 mb-0 font-weight-bold text-gray-800">
+                        <div class="btn-group" role="group">
+                           <button type="button" class="btn btn-primary mb-2" data-bs-toggle="button" autocomplete="off" id="ctrlStart" >Marche</button>
+                           <button type="button" class="btn btn-primary mb-2" data-bs-toggle="button" autocomplete="off" id="ctrlStop" >Arrêt</button>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="col-auto">
+                     <i class="fas fa-fw fa-cog fa-2x text-gray-300"></i>
+                  </div>
+            </div>
+         </div>
+   
+      </div>
+   </div>
+</div>
+
+
+
+
+{% endblock %}
+
+{% block script %}
+<script>
+   //On load script
+   $( window ).on( "load", function() {
+      $.post("/loadModule",{data: 'motorDCAxisModule'});
+   } );
+   
+</script>
+<script>
+   // sidebar scripts
+   $("#ldashboard").on("click",function(e){
+          e.preventDefault();
+          $.get("/dashboard", function( data ) {
+              $("#content").html(data);
+          });
+      });
+</script>
+
+
+
+<script type="text/javascript">
+   // Dashboard scripts
+   $("#startSim").click(function(){
+      $.post("/startSim", function(data){
+         if(data['success']){
+            // Finally creat the event listenner
+            var source = new EventSource("/runSim");
+            source.onmessage = function (event) {
+               const myArray = event.data.split(" ");
+               if(myArray[0]==='finished'){
+                  source.close();
+                  return;
+               }
+               var pos = document.getElementById('position');
+               pos.textContent =myArray[0];
+               var translate_mm = parseFloat(myArray[0])*1000;
+               $("#chariot").attr("transform", "translate("+translate_mm+" 0.0)");
+               if(myArray[1]==="True"){
+                  document.getElementById('capteur1').className = "fas fa-toggle-on fa-2x text-success ";
+               }else{
+                  document.getElementById('capteur1').className = "fas fa-toggle-off fa-2x text-gray-800";
+               }
+               /*
+               if(myArray[2]==="True"){
+                  document.getElementById('capteur2').className = "fas fa-toggle-on fa-2x text-success ";
+               }else{
+                  document.getElementById('capteur2').className = "fas fa-toggle-off fa-2x text-gray-800";
+               }
+               if(myArray[3]==="True"){
+                  document.getElementById('capteur3').className = "fas fa-toggle-on fa-2x text-success ";
+               }else{
+                  document.getElementById('capteur3').className = "fas fa-toggle-off fa-2x text-gray-800";
+               }
+               if(myArray[4]==="True"){
+                  document.getElementById('moteur').className = "fas fa-toggle-on fa-2x text-success ";
+               }else{
+                  document.getElementById('moteur').className = "fas fa-toggle-off fa-2x text-gray-800";
+               }
+               if(myArray[5]==="True"){
+                  document.getElementById('reverse').className = "fas fa-toggle-on fa-2x text-success ";
+               }else{
+                  document.getElementById('reverse').className = "fas fa-toggle-off fa-2x text-gray-800";
+               }*/
+            };
+         }
+      });
+      
+   });
+   $("#stopSim").click(function(){
+      $.post("/stopSim");
+   });
+   $("#resetSim").click(function(){
+      $.post("/resetSim", function(data){
+         $('#position').text('0.0');
+      });
+   });
+
+   $("#ctrlMan").click(function(){
+      $("#ctrlMan").addClass('btn-primary');
+      $("#ctrlMan").removeClass('btn-secondary');
+      $("#ctrlAuto").removeClass('btn-primary');
+      $("#ctrlAuto").addClass('btn-secondary');
+      $.post("/ctrl",{data: 'module.connector.args.context[0].setValues(0x02, 0x01, [False])'});
+   });
+   $("#ctrlAuto").click(function(){
+      $("#ctrlAuto").addClass('btn-primary');
+      $("#ctrlAuto").removeClass('btn-secondary');
+      $("#ctrlMan").removeClass('btn-primary');
+      $("#ctrlMan").addClass('btn-secondary');
+      $.post("/ctrl",{data: 'module.connector.args.context[0].setValues(0x02, 0x01, [True])'});
+   });
+
+   $("#ctrlStart").click(function(){
+      $("#ctrlStart").addClass('btn-primary');
+      $("#ctrlStart").removeClass('btn-secondary');
+      $("#ctrlStop").removeClass('btn-primary');
+      $("#ctrlStop").addClass('btn-secondary');
+      $.post("/ctrl",{data: 'module.connector.args.context[0].setValues(0x02, 0x02, [True])'});
+   });
+   $("#ctrlStop").click(function(){
+      $("#ctrlStop").addClass('btn-primary');
+      $("#ctrlStop").removeClass('btn-secondary');
+      $("#ctrlStart").removeClass('btn-primary');
+      $("#ctrlStart").addClass('btn-secondary');
+      $.post("/ctrl",{data: 'module.connector.args.context[0].setValues(0x02, 0x02, [False])'});
+   });
+
+   $("#ctrlLeft").on("mousedown", function(){
+      $.post("/ctrl",{data: 'module.connector.args.context[0].setValues(0x02, 0x03, [True])'});
+   });
+   $("#ctrlLeft").on("mouseup mouseleave", function(){
+      $.post("/ctrl",{data: 'module.connector.args.context[0].setValues(0x02, 0x03, [False])'});
+   });
+
+   $("#ctrlRight").on("mousedown", function(){
+      $.post("/ctrl",{data: 'module.connector.args.context[0].setValues(0x02, 0x04, [True])'});
+   });
+   $("#ctrlRight").on("mouseup mouseleave", function(){
+      $.post("/ctrl",{data: 'module.connector.args.context[0].setValues(0x02, 0x04, [False])'});
+   });
+
+   $('#connect').click(function connect() {
+            if(!connected){
+                $('#connecting').text('Connecting...');
+                $('#connecting').show();
+                $.post('/connect',
+                    {
+                        address: $('#address').val()
+                    },
+                    function(data) {
+                        $('#connecting').hide();
+                        if(data['success']){
+                            connected=true;
+                            //create the event for connection checker
+                            var source = new EventSource("/checkConnect");
+                            source.onmessage = function (event) {
+                                var btn = document.getElementById('connect');
+                                if(event.data==="finished"){
+                                    source.close();
+                                    btn.children[0].className= "fas fa-lock-open";
+                                    return;
+                                }
+                                if(event.data==="True"){
+                                    btn.children[0].className= "fas fa-lock";
+                                }else{
+                                    btn.children[0].className= "fas fa-lock-open";
+                                }
+                            }
+                        }
+                    }
+                );
+            }else{
+                $('#connecting').text('Disconnecting...');
+                $('#connecting').show();
+                $.post('/disconnect',
+                    function(data) {
+                        $('#connecting').hide();
+                        if(data['success']){
+                            connected=false;
+                        }
+                    }
+                );
+            }
+        });
+</script>
+
+{% endblock %}
