@@ -180,6 +180,9 @@
                            Position [m]</div>
                         <div class="h5 mb-0 font-weight-bold text-gray-800" id="position">0.0</div>
                         <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                           Vitesse [mm/s]</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800" id="speed">0.0</div>
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                            Courant [A]</div>
                         <div class="h5 mb-0 font-weight-bold text-gray-800" id="courant">0.0</div>
                         <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
@@ -306,8 +309,11 @@
                   source.close();
                   return;
                }
-               var pos = document.getElementById('position');
-               pos.textContent =myArray[0];
+               $("#position").text(myArray[0]);
+               $("#speed").text(myArray[1]);
+               $("#courant").text(myArray[2]);
+               $("#temp").text(myArray[3]);
+               $("#voltage").text(myArray[4])
                var translate_mm = parseFloat(myArray[0])*1000;
                $("#chariot").attr("transform", "translate("+translate_mm+" 0.0)");
                if(myArray[1]==="True"){

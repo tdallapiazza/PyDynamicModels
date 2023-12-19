@@ -35,12 +35,13 @@ class MotorDCAxisModule():
         # then read holding register
         reg = self.connector.args.context[0].getValues(0x03, 0x00, 2)
         self.model.voltage = registers_to_float(reg)
-        speed = "%.3f"%self.model.omega
-        current = "%.3f"%self.model.current
-        temperature ="%.3f"%self.model.temp
+        speed = "%.1f"%self.model.omega
+        current = "%.1f"%self.model.current
+        temperature ="%d"%self.model.temp
         pos = "%.3f"%self.model.pos
+        voltage = "%.1f"%self.model.voltage
         # formating the response
-        ret ='{} {} {} {}'.format(pos, speed, current, temperature)
+        ret ='{} {} {} {} {}'.format(pos, speed, current, temperature, voltage)
         return ret
     
 

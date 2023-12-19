@@ -19,7 +19,7 @@ class MotorDCAxisModel(ModelInterface):
         self.frictionFactor = 52e-6 + 0.2e-3 #rotor plus external
         self.inertia = 6.3e-6 + 5e-4 #rotor plus external
         self.heatCapacity = 186
-        self.convectionFactor = 0.025
+        self.convectionFactor = 2.5
         self.gearRatio = 6.6
         self.pitch = 0.005
 
