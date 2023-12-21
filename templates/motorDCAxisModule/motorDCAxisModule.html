@@ -316,8 +316,8 @@
                $("#voltage").text(myArray[4])
                var translate_mm = parseFloat(myArray[0])*1000;
                $("#chariot").attr("transform", "translate("+translate_mm+" 0.0)");
-               if(myArray[1]==="True"){
-                  document.getElementById('capteur1').className = "fas fa-toggle-on fa-2x text-success ";
+               if(myArray[5]==="True"){
+                  document.getElementById('capteur1').className = "fas fa-toggle-on fa-2x text-danger ";
                }else{
                   document.getElementById('capteur1').className = "fas fa-toggle-off fa-2x text-gray-800";
                }

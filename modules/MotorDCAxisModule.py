@@ -41,7 +41,7 @@ class MotorDCAxisModule():
         pos = "%.3f"%self.model.pos
         voltage = "%.1f"%self.model.voltage
         # formating the response
-        ret ='{} {} {} {} {}'.format(pos, speed, current, temperature, voltage)
+        ret ='{} {} {} {} {} {}'.format(pos, speed, current, temperature, voltage, self.model.stall)
         return ret
     
 

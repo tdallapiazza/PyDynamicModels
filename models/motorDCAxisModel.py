@@ -35,7 +35,13 @@ class MotorDCAxisModel(ModelInterface):
     def integrate(self):
         print("Starting thread\n")
         while True:
-            sol = solve(self.ode_rhs, (0.0, self.dt), [self.current, self.omega, self.temp, self.pos], )
+            sol=[]
+            if((self.pos<=0.0 and self.voltage < 0) or (self.pos>=1.2 and self.voltage > 0)):
+                sol = solve(self.ode_stall, (0.0, self.dt), [self.current, 0.0, self.temp, self.pos], )
+                self.stall = True
+            else:
+                sol = solve(self.ode_rhs, (0.0, self.dt), [self.current, self.omega, self.temp, self.pos], )
+                self.stall = False
             self.current = sol.y[0, -1]
             self.omega = sol.y[1, -1]
             self.temp = sol.y[2, -1]
@@ -70,6 +76,14 @@ class MotorDCAxisModel(ModelInterface):
         d_temp = (self.resistance*pow(y[0], 2)-self.convectionFactor*(y[2]-self.temp_inf))/self.heatCapacity
         d_pos  = self.pitch*self.omega/self.gearRatio
         return [d_current, d_omega, d_temp, d_pos]
+    
+    def ode_stall(self, t, y):
+        d_current = (self.voltage-self.resistance*y[0])/self.inductance
+        d_omega = 0.0
+        d_temp = (self.resistance*pow(y[0], 2)-self.convectionFactor*(y[2]-self.temp_inf))/self.heatCapacity
+        d_pos = 0.0
+        return [d_current, d_omega, d_temp, d_pos]
+
 
 if __name__ == '__main__':
     sim=MotorDCAxisModel()
